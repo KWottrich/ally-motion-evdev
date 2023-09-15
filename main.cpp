@@ -41,6 +41,7 @@ int main(int argc, char** argv)
 			return 0;
 		}
 	}
+	std::cout<<"Found device "<<config.device<<std::endl;
 	
 	Accelerometer accel;
 	
