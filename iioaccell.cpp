@@ -36,20 +36,20 @@ bool Accelerometer::openDevice(const std::string& device)
 	if(!status) 
 	{
 		xScale = 1;
-		std::cerr<<"Device dosent have in_accel_x_scale assuming 1\n";
+		std::cerr<<"Device not reporting in_accel_x_scale, assuming scale=1\n";
 	}
 	
 	yScale = readFile(deviceDir + "/in_accel_y_scale", status);
 	if(!status) 
 	{
 		yScale = 1;
-		std::cerr<<"Device dosent have in_accel_y_scale assuming 1\n";
+		std::cerr<<"Device not reporting in_accel_y_scale, assuming scale=1\n";
 	}
 	
 	zScale = readFile(deviceDir + "/in_accel_z_scale", status);
 	if(!status) 
 	{
-		std::cerr<<"Device dosent have in_accel_z_scale assuming 1\n";
+		std::cerr<<"Device not reporting in_accel_z_scale, assuming scale=1\n";
 		zScale = 1;
 	}
 	
@@ -69,7 +69,7 @@ Accelerometer::Frame Accelerometer::getFrame()
 int Accelerometer::getRate()
 {
 	bool status = false;
-	int rate = readFile(deviceDir + "/rate", status);
+	int rate = readFile(deviceDir + "/in_accel_sampling_frequency", status);
 	if(status) return rate;
 	else return -1;
 }
@@ -77,11 +77,11 @@ int Accelerometer::getRate()
 bool Accelerometer::setRate(unsigned int rate)
 {
 	std::fstream availabeRatesFile;
-	availabeRatesFile.open(deviceDir + "/sampling_frequency_available", std::ios_base::in);
+	availabeRatesFile.open(deviceDir + "/in_accel_sampling_frequency_available", std::ios_base::in);
 	if(!availabeRatesFile.is_open()) return false;
 	
 	std::fstream rateFile;
-	rateFile.open(deviceDir + "/sampling_frequency", std::ios_base::out);
+	rateFile.open(deviceDir + "/in_accel_sampling_frequency", std::ios_base::out);
 	if(!rateFile.is_open())
 	{
 		availabeRatesFile.close();
@@ -91,7 +91,7 @@ bool Accelerometer::setRate(unsigned int rate)
 	int curRate=-1;
 	while(availabeRatesFile >> curRate) 
 	{
-		std::cout<<"available rate "<<curRate<<'\n';
+		std::cout<<"available accel sampling rate "<<curRate<<'\n';
 		if(curRate >= static_cast<int>(rate))
 		{
 			std::cout<<"closest available rate "<<curRate<<'\n';
@@ -134,7 +134,7 @@ Accelerometer::~Accelerometer()
 	fileZ.close();
 }
 
-std::string Accelerometer::findAccellerometer()
+std::string Accelerometer::findAccelerometer()
 {
 	for(const auto & entry : std::filesystem::directory_iterator(IIO_DIRECTORY))
     {

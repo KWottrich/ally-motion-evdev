@@ -6,7 +6,11 @@
 #include <signal.h>
 #include "uinputdev.h"
 #include "iioaccell.h"
+#include "iiogyro.h"
 #include "argpopt.h"
+
+#define ACCEL_SCALE 255/9.81
+#define GYRO_SCALE 1
 
 bool stop = false;
 
@@ -18,35 +22,43 @@ void sigTerm(int dummy)
 int main(int argc, char** argv)
 {
 	UinputDevice dev;
-	if(!dev.openDev("/dev/uinput", "AccelerometerJoystick", 0x46d, 0xc214))
+	if(!dev.openDev("/dev/uinput", "VirtMotionController", 0x46d, 0xc214))
 	{
 		std::cerr<<"Failed to open /dev/uinput: ";
 		perror(NULL);
 		return -1;
 	}
 	
-	std::string accellPath;
-	
 	Config config;
 	argp_parse(&argp, argc, argv, 0, 0, &config);
 	
 	if(config.device.empty())
 	{
-		config.device = Accelerometer::findAccellerometer();
+		config.device = Accelerometer::findAccelerometer();
 		if(config.device.empty())
 		{
-			std::cout<<"No accelerometer specifyed and none found\n";
+			std::cout<<"No accelerometer specified and none found\n";
 			return 0;
 		}
 	}
 	
 	Accelerometer accel;
 	
-	int startingRate = accel.getRate();
+	int startingAccelRate = accel.getRate();
 	
 	if(!accel.openDevice(config.device))
 	{
-		std::cerr<<"failed to open iio device "<<config.device<<std::endl;
+		std::cerr<<"failed to open iio device "<<config.device<<" as an accelerometer"<<std::endl;
+		return -1;
+	}
+
+	Gyro gyro;
+
+	int startingGyroRate = gyro.getRate();
+	
+	if(!gyro.openDevice(config.device))
+	{
+		std::cerr<<"failed to open iio device "<<config.device<<" as an gyroscope"<<std::endl;
 		return -1;
 	}
 	
@@ -55,22 +67,36 @@ int main(int argc, char** argv)
 	signal(SIGHUP, sigTerm);
 	
 	if(config.rate > 0)
+	{
 		accel.setRate(config.rate);
+		gyro.setRate(config.rate);
+	}
 	
 	while(!stop)
 	{
-		Accelerometer::Frame frame = accel.getFrame();
-		frame.scale(255/9.81);
-		if(abs(frame.x) > 512)
-			frame.x = 0;
-		if(abs(frame.y) > 512)
-			frame.y = 0;
-		if(abs(frame.z) > 512)
-			frame.z = 0;
-		dev.sendAbs(frame.x,frame.y,frame.z);
+		Accelerometer::Frame accelFrame = accel.getFrame();
+		accelFrame.scale(ACCEL_SCALE);
+		if(abs(accelFrame.x) > 512)
+			accelFrame.x = 0;
+		if(abs(accelFrame.y) > 512)
+			accelFrame.y = 0;
+		if(abs(accelFrame.z) > 512)
+			accelFrame.z = 0;
+		
+		Gyro::Frame gyroFrame = gyro.getFrame();
+		gyroFrame.scale(GYRO_SCALE);
+		if(abs(gyroFrame.x) > 512)
+			gyroFrame.x = 0;
+		if(abs(gyroFrame.y) > 512)
+			gyroFrame.y = 0;
+		if(abs(gyroFrame.z) > 512)
+			gyroFrame.z = 0;
+
+		dev.sendAbs(accelFrame.x,accelFrame.y,accelFrame.z,gyroFrame.x,gyroFrame.y,gyroFrame.z);
 	}
 	
-	accel.setRate(startingRate);
+	accel.setRate(startingAccelRate);
+	gyro.setRate(startingGyroRate);
 	
 	return 0;
 }

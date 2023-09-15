@@ -4,7 +4,7 @@
 
 #define IIO_DIRECTORY "/sys/bus/iio/devices/"
 
-class Accelerometer
+class Gyro
 {
 public:
 	
@@ -26,9 +26,7 @@ private:
 	std::fstream fileX;
 	std::fstream fileY;
 	std::fstream fileZ;
-	double xScale;
-	double yScale;
-	double zScale;
+	double scale;
 	
 	std::string deviceDir;
 	
@@ -37,10 +35,10 @@ private:
 	
 public:
 	
-	static std::string findAccelerometer();
+	static std::string findGyro();
 	bool openDevice(const std::string& device);
 	bool setRate(unsigned int rate);
 	int getRate();
 	Frame getFrame();
-	~Accelerometer();
+	~Gyro();
 };

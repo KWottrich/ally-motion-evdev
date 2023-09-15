@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.4)
 
 project(iio-uinput)
 
-set(SRC_FILES main.cpp uinputdev.cpp iioaccell.cpp)
+set(SRC_FILES main.cpp uinputdev.cpp iioaccell.cpp iiogyro.cpp)
 set(LIBS )
 
 add_executable(${PROJECT_NAME} ${SRC_FILES})

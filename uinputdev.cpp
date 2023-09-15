@@ -29,6 +29,9 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	ioctl(fd, UI_SET_ABSBIT, ABS_X);
 	ioctl(fd, UI_SET_ABSBIT, ABS_Y);
 	ioctl(fd, UI_SET_ABSBIT, ABS_Z);
+	ioctl(fd, UI_SET_ABSBIT, ABS_RX);
+	ioctl(fd, UI_SET_ABSBIT, ABS_RY);
+	ioctl(fd, UI_SET_ABSBIT, ABS_RZ);
 	
 	ioctl(fd, UI_SET_KEYBIT, BTN_TRIGGER);
 	ioctl(fd, UI_SET_KEYBIT, BTN_THUMB);
@@ -57,6 +60,30 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	devAbsZ.absinfo.fuzz = 0;
 	if(ioctl(fd, UI_ABS_SETUP, &devAbsZ) < 0) return false;
 	
+	struct uinput_abs_setup devAbsRX = {0};
+	devAbsRX.code = ABS_RX;
+	devAbsRX.absinfo.minimum = -512;
+	devAbsRX.absinfo.maximum = 512;
+	devAbsRX.absinfo.flat = 5;
+	devAbsRX.absinfo.fuzz = 0;
+	if(ioctl(fd, UI_ABS_SETUP, &devAbsRX) < 0) return false;
+
+	struct uinput_abs_setup devAbsRY = {0};
+	devAbsRY.code = ABS_RY;
+	devAbsRY.absinfo.minimum = -512;
+	devAbsRY.absinfo.maximum = 512;
+	devAbsRY.absinfo.flat = 5;
+	devAbsRY.absinfo.fuzz = 0;
+	if(ioctl(fd, UI_ABS_SETUP, &devAbsRY) < 0) return false;
+	
+	struct uinput_abs_setup devAbsRZ = {0};
+	devAbsRZ.code = ABS_RZ;
+	devAbsRZ.absinfo.minimum = -512;
+	devAbsRZ.absinfo.maximum = 512;
+	devAbsRZ.absinfo.flat = 5;
+	devAbsRZ.absinfo.fuzz = 0;
+	if(ioctl(fd, UI_ABS_SETUP, &devAbsRZ) < 0) return false;
+	
 		
 	if(ioctl(fd, UI_DEV_SETUP, &dev) < 0) return false;
 	if(ioctl(fd, UI_DEV_CREATE) < 0) return false;
@@ -64,7 +91,7 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	return true;
 }
 
-bool UinputDevice::sendAbs(int x, int y, int z)
+bool UinputDevice::sendAbs(int x, int y, int z, int rx, int ry, int rz)
 {
 	if(fd < 0) return false;
 	
@@ -83,6 +110,21 @@ bool UinputDevice::sendAbs(int x, int y, int z)
 
 	ev.code = ABS_Z;
 	ev.value = z;
+	if(write(fd, &ev, sizeof(ev)) != sizeof(ev)) 
+		return false;
+	
+	ev.code = ABS_RX;
+	ev.value = rx;
+	if(write(fd, &ev, sizeof(ev)) != sizeof(ev)) 
+		return false;
+
+	ev.code = ABS_RY;
+	ev.value = ry;
+	if(write(fd, &ev, sizeof(ev)) != sizeof(ev)) 
+		return false;
+
+	ev.code = ABS_RZ;
+	ev.value = rz;
 	if(write(fd, &ev, sizeof(ev)) != sizeof(ev)) 
 		return false;
 
