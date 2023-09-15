@@ -82,6 +82,7 @@ int main(int argc, char** argv)
 		
 		Gyro::Frame gyroFrame = gyro.getFrame();
 		gyroFrame.scale(GYRO_SCALE);
+		std::cout<<"\rgyro x RAW: "<<gyroFrame.x<<"         ";
 		if(abs(gyroFrame.x) > 512)
 			gyroFrame.x = 0;
 		if(abs(gyroFrame.y) > 512)
@@ -91,6 +92,7 @@ int main(int argc, char** argv)
 
 		dev.sendAbs(accelFrame.x,accelFrame.y,accelFrame.z,gyroFrame.x,gyroFrame.y,gyroFrame.z);
 	}
+	std::cout<<std::endl<<"Restoring original rate..."<<std::endl;
 	
 	accel.setRate(startingAccelRate);
 	gyro.setRate(startingGyroRate);
