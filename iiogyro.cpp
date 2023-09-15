@@ -62,7 +62,11 @@ int Gyro::getRate()
 		std::cout<<"read rate "<<rate<<"hz from "<<rateFile<<std::endl;
 		return rate;
 	}
-	else return -1;
+	else
+	{
+		std::cerr<<"failed to read rate from "<<rateFile<<std::endl;
+		return -1;
+	}
 }
 
 bool Gyro::setRate(unsigned int rate)
