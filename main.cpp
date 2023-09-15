@@ -54,7 +54,7 @@ int main(int argc, char** argv)
 	Gyro gyro;
 	if(!gyro.openDevice(config.device))
 	{
-		std::cerr<<"failed to open iio device "<<config.device<<" as an gyroscope"<<std::endl;
+		std::cerr<<"failed to open iio device "<<config.device<<" as a gyroscope"<<std::endl;
 		return -1;
 	}
 	int startingGyroRate = gyro.getRate();

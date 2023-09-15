@@ -86,7 +86,7 @@ bool Gyro::setRate(unsigned int rate)
 	double curRate=-1;
 	while(availableRatesFile >> curRate) 
 	{
-		std::cout<<"available gyro sampling rate "<<curRate<<'\n';
+		//std::cout<<"available gyro sampling rate "<<curRate<<'\n';
 		if(curRate >= static_cast<int>(rate))
 		{
 			std::cout<<"closest available rate "<<curRate<<'\n';
