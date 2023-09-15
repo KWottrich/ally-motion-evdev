@@ -79,7 +79,7 @@ bool Gyro::setRate(unsigned int rate)
 		return false;
 	}
 	
-	int curRate=-1;
+	double curRate=-1;
 	while(availableRatesFile >> curRate) 
 	{
 		std::cout<<"available gyro sampling rate "<<curRate<<'\n';
