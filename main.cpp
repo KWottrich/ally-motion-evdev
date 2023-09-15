@@ -90,7 +90,7 @@ int main(int argc, char** argv)
 		if(abs(gyroFrame.z) > 512)
 			gyroFrame.z = 0;
 
-		dev.sendAbs(0,0,0,gyroFrame.x,gyroFrame.y,gyroFrame.z);
+		dev.sendAbs(gyroFrame.x,gyroFrame.y,gyroFrame.z,0,0,0);
 	}
 	std::cout<<std::endl<<"Restoring original rate..."<<std::endl;
 	
