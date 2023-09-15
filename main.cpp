@@ -10,7 +10,7 @@
 #include "argpopt.h"
 
 #define ACCEL_SCALE 255/9.81
-#define GYRO_SCALE 1
+#define GYRO_SCALE 255/9.81
 
 bool stop = false;
 
