@@ -55,8 +55,13 @@ Gyro::Frame Gyro::getFrame()
 int Gyro::getRate()
 {
 	bool status = false;
-	int rate = readFile(deviceDir + "/in_anglvel_sampling_frequency", status);
-	if(status) return rate;
+	const std::string rateFile = deviceDir + "/in_anglvel_sampling_frequency";
+	int rate = readFile(rateFile, status);
+	if(status)
+	{
+		std::cout<<"read rate "<<rate<<"hz from "<<rateFile<<std::endl;
+		return rate;
+	}
 	else return -1;
 }
 
