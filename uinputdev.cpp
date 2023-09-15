@@ -32,9 +32,11 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	ioctl(fd, UI_SET_ABSBIT, ABS_RX);
 	ioctl(fd, UI_SET_ABSBIT, ABS_RY);
 	ioctl(fd, UI_SET_ABSBIT, ABS_RZ);
+	ioctl(fd, UI_SET_PROPBIT, INPUT_PROP_ACCELEROMETER);
 	
 	ioctl(fd, UI_SET_KEYBIT, BTN_TRIGGER);
 	ioctl(fd, UI_SET_KEYBIT, BTN_THUMB);
+	ioctl(fd, UI_SET_KEYBIT, BTN_THUMB2);
 	
 	struct uinput_abs_setup devAbsX = {0};
 	devAbsX.code = ABS_X;
