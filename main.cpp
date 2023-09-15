@@ -71,14 +71,14 @@ int main(int argc, char** argv)
 	
 	while(!stop)
 	{
-		Accelerometer::Frame accelFrame = accel.getFrame();
+		/*Accelerometer::Frame accelFrame = accel.getFrame();
 		accelFrame.scale(ACCEL_SCALE);
 		if(abs(accelFrame.x) > 512)
 			accelFrame.x = 0;
 		if(abs(accelFrame.y) > 512)
 			accelFrame.y = 0;
 		if(abs(accelFrame.z) > 512)
-			accelFrame.z = 0;
+			accelFrame.z = 0;*/
 		
 		Gyro::Frame gyroFrame = gyro.getFrame();
 		gyroFrame.scale(GYRO_SCALE);
@@ -90,7 +90,7 @@ int main(int argc, char** argv)
 		if(abs(gyroFrame.z) > 512)
 			gyroFrame.z = 0;
 
-		dev.sendAbs(accelFrame.x,accelFrame.y,accelFrame.z,gyroFrame.x,gyroFrame.y,gyroFrame.z);
+		dev.sendAbs(0,0,0,gyroFrame.x,gyroFrame.y,gyroFrame.z);
 	}
 	std::cout<<std::endl<<"Restoring original rate..."<<std::endl;
 	
