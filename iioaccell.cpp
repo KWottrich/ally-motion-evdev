@@ -76,20 +76,20 @@ int Accelerometer::getRate()
 
 bool Accelerometer::setRate(unsigned int rate)
 {
-	std::fstream availabeRatesFile;
-	availabeRatesFile.open(deviceDir + "/in_accel_sampling_frequency_available", std::ios_base::in);
-	if(!availabeRatesFile.is_open()) return false;
+	std::fstream availableRatesFile;
+	availableRatesFile.open(deviceDir + "/in_accel_sampling_frequency_available", std::ios_base::in);
+	if(!availableRatesFile.is_open()) return false;
 	
 	std::fstream rateFile;
 	rateFile.open(deviceDir + "/in_accel_sampling_frequency", std::ios_base::out);
 	if(!rateFile.is_open())
 	{
-		availabeRatesFile.close();
+		availableRatesFile.close();
 		return false;
 	}
 	
-	int curRate=-1;
-	while(availabeRatesFile >> curRate) 
+	double curRate=-1;
+	while(availableRatesFile >> curRate) 
 	{
 		std::cout<<"available accel sampling rate "<<curRate<<'\n';
 		if(curRate >= static_cast<int>(rate))
@@ -99,7 +99,7 @@ bool Accelerometer::setRate(unsigned int rate)
 			break;
 		}
 	}
-	availabeRatesFile.close();
+	availableRatesFile.close();
 	rateFile.close();
 	return true;
 }
