@@ -44,24 +44,20 @@ int main(int argc, char** argv)
 	std::cout<<"Found device "<<config.device<<std::endl;
 	
 	Accelerometer accel;
-	
-	int startingAccelRate = accel.getRate();
-	
 	if(!accel.openDevice(config.device))
 	{
 		std::cerr<<"failed to open iio device "<<config.device<<" as an accelerometer"<<std::endl;
 		return -1;
 	}
+	int startingAccelRate = accel.getRate();
 
 	Gyro gyro;
-
-	int startingGyroRate = gyro.getRate();
-	
 	if(!gyro.openDevice(config.device))
 	{
 		std::cerr<<"failed to open iio device "<<config.device<<" as an gyroscope"<<std::endl;
 		return -1;
 	}
+	int startingGyroRate = gyro.getRate();
 	
 	signal(SIGINT, sigTerm);
 	signal(SIGTERM, sigTerm);
