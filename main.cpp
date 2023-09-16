@@ -69,6 +69,7 @@ int main(int argc, char** argv)
 		gyro.setRate(config.rate);
 	}
 	
+	double maxGyroX = 0, maxGyroY = 0, maxGyroZ = 0;
 	std::cout<<"   Gyro X    |    Gyro Y    |    Gyro Z"<<std::endl;
 	while(!stop)
 	{
@@ -84,7 +85,13 @@ int main(int argc, char** argv)
 		Gyro::Frame gyroFrame = gyro.getFrame();
 		//gyroFrame.scale(GYRO_SCALE);
 		std::cout<<"\r";
-		printf("%+4.6f | %+4.6f | %+4.6f", gyroFrame.x, gyroFrame.y, gyroFrame.z);
+		printf("%+4.10f | %+4.10f | %+4.10f", gyroFrame.x, gyroFrame.y, gyroFrame.z);
+		if (abs(gyroFrame.x) > maxGyroX)
+			maxGyroX = abs(gyroFrame.x);
+		if (abs(gyroFrame.y) > maxGyroY)
+			maxGyroY = abs(gyroFrame.y);
+		if (abs(gyroFrame.z) > maxGyroZ)
+			maxGyroZ = abs(gyroFrame.z);
 		/*
 		if(abs(gyroFrame.x) > 512)
 			gyroFrame.x = 0;
@@ -99,6 +106,11 @@ int main(int argc, char** argv)
 	
 	accel.setRate(startingAccelRate);
 	gyro.setRate(startingGyroRate);
+
+	std::cout<<"Max gyro values reported:"<<std::endl;
+	std::cout<<"X: "<<maxGyroX<<std::endl;
+	std::cout<<"Y: "<<maxGyroY<<std::endl;
+	std::cout<<"Z: "<<maxGyroZ<<std::endl;
 	
 	return 0;
 }
