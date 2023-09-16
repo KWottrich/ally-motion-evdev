@@ -69,6 +69,7 @@ int main(int argc, char** argv)
 		gyro.setRate(config.rate);
 	}
 	
+	std::cout<<"   Gyro X    |    Gyro Y    |    Gyro Z"<<std::endl;
 	while(!stop)
 	{
 		Accelerometer::Frame accelFrame = accel.getFrame();
@@ -82,8 +83,8 @@ int main(int argc, char** argv)
 		
 		Gyro::Frame gyroFrame = gyro.getFrame();
 		//gyroFrame.scale(GYRO_SCALE);
-		std::cout<<"Gyro X | Gyro Y | Gyro Z"<<std::endl;
-		std::cout<<"\r"<<gyroFrame.x<<" | "<<gyroFrame.y<<" | "<<gyroFrame.z;
+		std::cout<<"\r";
+		printf("%+4.6f | %+4.6f | %+4.6f", gyroFrame.x, gyroFrame.y, gyroFrame.z);
 		/*
 		if(abs(gyroFrame.x) > 512)
 			gyroFrame.x = 0;
