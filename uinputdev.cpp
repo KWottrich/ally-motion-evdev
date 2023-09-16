@@ -8,6 +8,9 @@
 
 #include "uinputdev.h"
 
+#define GYRO_RANGE 2000
+#define GYRO_RESOLUTION 1024 // Copied from Dualshock 4, probably incorrect
+
 UinputDevice::UinputDevice()
 {
 }
@@ -24,20 +27,21 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	dev.id.vendor = vendor;
 	dev.id.product = product;
 	
-	ioctl(fd, UI_SET_EVBIT, EV_ABS);
-	ioctl(fd, UI_SET_EVBIT, EV_KEY);
+	ioctl(fd, UI_SET_PROPBIT, INPUT_PROP_ACCELEROMETER);
+	ioctl(fd, UI_SET_EVBIT, EV_MSC);
+	ioctl(fd, UI_SET_MSCBIT, MSC_TIMESTAMP);
+
 	ioctl(fd, UI_SET_ABSBIT, ABS_X);
 	ioctl(fd, UI_SET_ABSBIT, ABS_Y);
 	ioctl(fd, UI_SET_ABSBIT, ABS_Z);
 	ioctl(fd, UI_SET_ABSBIT, ABS_RX);
 	ioctl(fd, UI_SET_ABSBIT, ABS_RY);
 	ioctl(fd, UI_SET_ABSBIT, ABS_RZ);
-	//ioctl(fd, UI_SET_PROPBIT, INPUT_PROP_ACCELEROMETER);
-	
+	/*
 	ioctl(fd, UI_SET_KEYBIT, BTN_TRIGGER);
 	ioctl(fd, UI_SET_KEYBIT, BTN_THUMB);
 	ioctl(fd, UI_SET_KEYBIT, BTN_THUMB2);
-	
+	*/
 	struct uinput_abs_setup devAbsX = {0};
 	devAbsX.code = ABS_X;
 	devAbsX.absinfo.minimum = -512;
@@ -64,26 +68,26 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	
 	struct uinput_abs_setup devAbsRX = {0};
 	devAbsRX.code = ABS_RX;
-	devAbsRX.absinfo.minimum = -512;
-	devAbsRX.absinfo.maximum = 512;
-	devAbsRX.absinfo.flat = 5;
-	devAbsRX.absinfo.fuzz = 0;
+	devAbsRX.absinfo.minimum = -GYRO_RANGE;
+	devAbsRX.absinfo.maximum = GYRO_RANGE;
+	devAbsRX.absinfo.fuzz = 16;
+	devAbsRX.absinfo.flat = 0;
 	if(ioctl(fd, UI_ABS_SETUP, &devAbsRX) < 0) return false;
 
 	struct uinput_abs_setup devAbsRY = {0};
 	devAbsRY.code = ABS_RY;
-	devAbsRY.absinfo.minimum = -512;
-	devAbsRY.absinfo.maximum = 512;
-	devAbsRY.absinfo.flat = 5;
-	devAbsRY.absinfo.fuzz = 0;
+	devAbsRY.absinfo.minimum = -GYRO_RANGE;
+	devAbsRY.absinfo.maximum = GYRO_RANGE;
+	devAbsRY.absinfo.fuzz = 16;
+	devAbsRY.absinfo.flat = 0;
 	if(ioctl(fd, UI_ABS_SETUP, &devAbsRY) < 0) return false;
 	
 	struct uinput_abs_setup devAbsRZ = {0};
 	devAbsRZ.code = ABS_RZ;
-	devAbsRZ.absinfo.minimum = -512;
-	devAbsRZ.absinfo.maximum = 512;
-	devAbsRZ.absinfo.flat = 5;
-	devAbsRZ.absinfo.fuzz = 0;
+	devAbsRZ.absinfo.minimum = -GYRO_RANGE;
+	devAbsRZ.absinfo.maximum = GYRO_RANGE;
+	devAbsRZ.absinfo.fuzz = 16;
+	devAbsRZ.absinfo.flat = 0;
 	if(ioctl(fd, UI_ABS_SETUP, &devAbsRZ) < 0) return false;
 	
 		
