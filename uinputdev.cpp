@@ -1,5 +1,4 @@
 #include <fcntl.h>
-#include <math.h>
 #include <errno.h>
 #include <sys/time.h>
 #include <unistd.h>
@@ -37,6 +36,7 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	ioctl(fd, UI_SET_ABSBIT, ABS_RX);
 	ioctl(fd, UI_SET_ABSBIT, ABS_RY);
 	ioctl(fd, UI_SET_ABSBIT, ABS_RZ);
+
 	/*
 	ioctl(fd, UI_SET_KEYBIT, BTN_TRIGGER);
 	ioctl(fd, UI_SET_KEYBIT, BTN_THUMB);
@@ -70,6 +70,7 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	devAbsRX.code = ABS_RX;
 	devAbsRX.absinfo.minimum = -GYRO_RANGE;
 	devAbsRX.absinfo.maximum = GYRO_RANGE;
+	devAbsRX.absinfo.resolution = 1; // 1 unit = 1 degree/s
 	devAbsRX.absinfo.fuzz = 16;
 	devAbsRX.absinfo.flat = 0;
 	if(ioctl(fd, UI_ABS_SETUP, &devAbsRX) < 0) return false;
@@ -78,6 +79,7 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	devAbsRY.code = ABS_RY;
 	devAbsRY.absinfo.minimum = -GYRO_RANGE;
 	devAbsRY.absinfo.maximum = GYRO_RANGE;
+	devAbsRY.absinfo.resolution = 1; // 1 unit = 1 degree/s
 	devAbsRY.absinfo.fuzz = 16;
 	devAbsRY.absinfo.flat = 0;
 	if(ioctl(fd, UI_ABS_SETUP, &devAbsRY) < 0) return false;
@@ -86,6 +88,7 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	devAbsRZ.code = ABS_RZ;
 	devAbsRZ.absinfo.minimum = -GYRO_RANGE;
 	devAbsRZ.absinfo.maximum = GYRO_RANGE;
+	devAbsRZ.absinfo.resolution = 1; // 1 unit = 1 degree/s
 	devAbsRZ.absinfo.fuzz = 16;
 	devAbsRZ.absinfo.flat = 0;
 	if(ioctl(fd, UI_ABS_SETUP, &devAbsRZ) < 0) return false;

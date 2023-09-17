@@ -12,6 +12,7 @@
 
 #define ACCEL_SCALE 255/9.81
 #define GYRO_SCALE 180/M_PI
+#define DEVNAME "VirtMotionController"
 
 bool stop = false;
 
@@ -23,12 +24,13 @@ void sigTerm(int dummy)
 int main(int argc, char** argv)
 {
 	UinputDevice dev;
-	if(!dev.openDev("/dev/uinput", "VirtMotionController", 0x46d, 0xc214))
+	if(!dev.openDev("/dev/uinput", DEVNAME, 0x46d, 0xc214))
 	{
 		std::cerr<<"Failed to open /dev/uinput: ";
 		perror(NULL);
 		return -1;
 	}
+	std::cout<<"Registered virtual device "<<DEVNAME<<std::endl;
 	
 	Config config;
 	argp_parse(&argp, argc, argv, 0, 0, &config);
