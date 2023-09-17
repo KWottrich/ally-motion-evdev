@@ -1,4 +1,5 @@
 #include <iostream>
+#include <math.h>
 #include <thread>
 #include <chrono>
 #include <string>
@@ -10,7 +11,7 @@
 #include "argpopt.h"
 
 #define ACCEL_SCALE 255/9.81
-#define GYRO_SCALE 255/4.9
+#define GYRO_SCALE 180/M_PI
 
 bool stop = false;
 
@@ -68,7 +69,7 @@ int main(int argc, char** argv)
 		accel.setRate(config.rate);
 		gyro.setRate(config.rate);
 	}
-	gyro.setScale(0.001065);
+	//gyro.setScale(0.001065);
 	
 	double maxGyroX = 0, maxGyroY = 0, maxGyroZ = 0;
 	std::cout<<"   Gyro X    |    Gyro Y    |    Gyro Z"<<std::endl;
@@ -84,7 +85,7 @@ int main(int argc, char** argv)
 			accelFrame.z = 0;
 		
 		Gyro::Frame gyroFrame = gyro.getFrame();
-		//gyroFrame.scale(GYRO_SCALE);
+		gyroFrame.scale(GYRO_SCALE);
 		std::cout<<"\r";
 		printf("%+4.9f | %+4.9f | %+4.9f", gyroFrame.x, gyroFrame.y, gyroFrame.z);
 		if (abs(gyroFrame.x) > maxGyroX)

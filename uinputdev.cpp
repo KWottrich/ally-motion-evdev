@@ -9,7 +9,7 @@
 
 #include "uinputdev.h"
 
-#define GYRO_RANGE 2000 * M_PI / 180 // max range is 2000 degrees/s, read as radians
+#define GYRO_RANGE 125 // max range is +/- 125 degrees/s
 
 UinputDevice::UinputDevice()
 {
