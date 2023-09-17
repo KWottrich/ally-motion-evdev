@@ -8,8 +8,7 @@
 
 #include "uinputdev.h"
 
-#define GYRO_RANGE 2000
-#define GYRO_RESOLUTION 1024 // Copied from Dualshock 4, probably incorrect
+#define GYRO_RANGE 125
 
 UinputDevice::UinputDevice()
 {
