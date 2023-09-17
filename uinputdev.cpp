@@ -1,4 +1,5 @@
 #include <fcntl.h>
+#include <math.h>
 #include <errno.h>
 #include <sys/time.h>
 #include <unistd.h>
@@ -8,7 +9,7 @@
 
 #include "uinputdev.h"
 
-#define GYRO_RANGE 125
+#define GYRO_RANGE 2000 * M_PI / 180 // max range is 2000 degrees/s, read as radians
 
 UinputDevice::UinputDevice()
 {

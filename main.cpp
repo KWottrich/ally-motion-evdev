@@ -68,6 +68,7 @@ int main(int argc, char** argv)
 		accel.setRate(config.rate);
 		gyro.setRate(config.rate);
 	}
+	gyro.setScale(0.001065);
 	
 	double maxGyroX = 0, maxGyroY = 0, maxGyroZ = 0;
 	std::cout<<"   Gyro X    |    Gyro Y    |    Gyro Z"<<std::endl;

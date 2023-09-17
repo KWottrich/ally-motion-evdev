@@ -99,6 +99,36 @@ bool Gyro::setRate(unsigned int rate)
 	return true;
 }
 
+bool Gyro::setScale(double scale)
+{
+	std::fstream availableScalesFile;
+	availableScalesFile.open(deviceDir + "/in_anglvel_scale_available", std::ios_base::in);
+	if(!availableScalesFile.is_open()) return false;
+	
+	std::fstream scaleFile;
+	scaleFile.open(deviceDir + "/in_anglvel_scale", std::ios_base::out);
+	if(!scaleFile.is_open())
+	{
+		availableScalesFile.close();
+		return false;
+	}
+	
+	double curScale=-1;
+	while(availableScalesFile >> curScale) 
+	{
+		//std::cout<<"available gyro sampling rate "<<curRate<<'\n';
+		if(curScale >= static_cast<double>(scale))
+		{
+			std::cout<<"closest available scale "<<curScale<<'\n';
+			scaleFile<<curScale;
+			break;
+		}
+	}
+	availableScalesFile.close();
+	scaleFile.close();
+	return true;
+}
+
 double Gyro::readFile(const std::string& fileName, bool& status)
 {
 	std::fstream file;

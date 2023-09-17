@@ -38,6 +38,7 @@ public:
 	static std::string findGyro();
 	bool openDevice(const std::string& device);
 	bool setRate(unsigned int rate);
+	bool setScale(double scale);
 	int getRate();
 	Frame getFrame();
 	~Gyro();
