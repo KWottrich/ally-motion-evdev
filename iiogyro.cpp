@@ -178,13 +178,14 @@ int Gyro::readRaw(const std::string& fileName, bool& status)
 		return 0;
 	}
 
-	int numRead = fread(buff, sizeof(char)*6, 1, fd);
+	/*int numRead = fread(buff, sizeof(char)*6, 1, fd);
 	if (numRead <= 0)
 	{
 		std::cerr<<"failed to read from "<<fileName<<", fread reported "<<numRead<<" chunks"<<std::endl;
 		status = false;
 		return 0;
-	}
+	}*/
+	memcpy(buff, fd->_IO_read_ptr, 6);
 	fclose(fd);
 
 	buff[6] = '\0'; //null-terminate the string
