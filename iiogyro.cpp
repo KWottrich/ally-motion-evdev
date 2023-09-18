@@ -1,5 +1,7 @@
 #include <filesystem>
 #include <iostream>
+#include <stdio.h>
+#include <string.h>
 
 #include "iiogyro.h"
 
@@ -49,9 +51,9 @@ Gyro::Frame Gyro::getFrame()
 {
 	Frame frame;
 	bool status;
-	frame.x = readFile(deviceDir + "/in_anglvel_x_raw", status);
-	frame.y = readFile(deviceDir + "/in_anglvel_y_raw", status);
-	frame.z = readFile(deviceDir + "/in_anglvel_z_raw", status);
+	frame.x = static_cast<double>(readRaw(deviceDir + "/in_anglvel_x_raw", status));
+	frame.y = static_cast<double>(readRaw(deviceDir + "/in_anglvel_y_raw", status));
+	frame.z = static_cast<double>(readRaw(deviceDir + "/in_anglvel_z_raw", status));
 	std::cout<<"\33[2K\rRAW: X="<<frame.x<<" Y="<<frame.y<<" Z="<<frame.z<<std::flush;
 	frame.x *= scale;
 	frame.y *= scale;
@@ -157,6 +159,30 @@ double Gyro::readFile(std::fstream& file, bool& status)
 	file >> result;
 	status = !file.rdstate();
 	return result;
+}
+
+short Gyro::readRaw(const std::string& fileName, bool& status)
+{
+	FILE* fd = NULL;
+	short buff[1];
+	memset(buff,0,sizeof(buff));
+
+	fd = fopen(fileName.c_str(),"r");
+
+	if (NULL == fd)
+	{
+		status = false;
+		return 0;
+	}
+
+	if (sizeof(short) != fread(buff,sizeof(short),1,fd))
+	{
+		std::cerr<<"failed to read from "<<fileName<<std::endl;
+		return 0;
+	}
+
+	fclose(fd);
+	return buff[0];
 }
 
 Gyro::~Gyro()
