@@ -68,7 +68,7 @@ int Gyro::getRate()
 	int rate = readFile(rateFile, status);
 	if(status)
 	{
-		std::cout<<"read rate "<<rate<<"hz from "<<rateFile<<std::endl;
+		//std::cout<<"read rate "<<rate<<"hz from "<<rateFile<<std::endl;
 		return rate;
 	}
 	else
@@ -98,7 +98,7 @@ bool Gyro::setRate(unsigned int rate)
 		//std::cout<<"available gyro sampling rate "<<curRate<<'\n';
 		if(curRate >= static_cast<int>(rate))
 		{
-			std::cout<<"closest available rate "<<curRate<<'\n';
+			std::cout<<"setting gyro rate: "<<curRate<<'\n';
 			rateFile<<curRate;
 			break;
 		}
@@ -128,7 +128,7 @@ bool Gyro::setScale(double scale)
 		//std::cout<<"available gyro sampling rate "<<curRate<<'\n';
 		if(curScale >= static_cast<double>(scale))
 		{
-			std::cout<<"closest available scale "<<curScale<<'\n';
+			std::cout<<"setting gyro scale: "<<curScale<<'\n';
 			scaleFile<<curScale;
 			break;
 		}
