@@ -72,6 +72,7 @@ int main(int argc, char** argv)
 		accel.setRate(config.rate);
 		gyro.setRate(config.rate);
 		sleep_ms = 1000/config.rate;
+		std::cout<<"Setting sleep between frames at "<<sleep_ms<<"ms"<<std::endl;
 	}
 	gyro.setScale(0.00106);
 	
