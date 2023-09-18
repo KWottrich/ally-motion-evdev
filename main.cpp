@@ -66,15 +66,18 @@ int main(int argc, char** argv)
 	signal(SIGTERM, sigTerm);
 	signal(SIGHUP, sigTerm);
 	
+	int sleep_ms = 0;
 	if(config.rate > 0)
 	{
 		accel.setRate(config.rate);
 		gyro.setRate(config.rate);
+		sleep_ms = 1000/config.rate;
 	}
 	gyro.setScale(0.00106);
 	
 	double maxGyroX = 0, maxGyroY = 0, maxGyroZ = 0;
-	std::cout<<"   Gyro X    |    Gyro Y    |    Gyro Z"<<std::endl;
+	//std::cout<<"   Gyro X    |    Gyro Y    |    Gyro Z"<<std::endl;
+
 	while(!stop)
 	{
 		Accelerometer::Frame accelFrame = accel.getFrame();
@@ -88,9 +91,9 @@ int main(int argc, char** argv)
 		
 		Gyro::Frame gyroFrame = gyro.getFrame();
 		gyroFrame.scale(GYRO_SCALE);
-		std::cout<<"\33[2K\r";
-		printf("%+012.6f | %+012.6f | %+012.6f", gyroFrame.x, gyroFrame.y, gyroFrame.z);
-		std::cout<<std::flush;
+		//std::cout<<"\33[2K\r";
+		//printf("%+012.6f | %+012.6f | %+012.6f", gyroFrame.x, gyroFrame.y, gyroFrame.z);
+		//std::cout<<std::flush;
 		if (abs(gyroFrame.x) > maxGyroX)
 			maxGyroX = abs(gyroFrame.x);
 		if (abs(gyroFrame.y) > maxGyroY)
@@ -99,8 +102,8 @@ int main(int argc, char** argv)
 			maxGyroZ = abs(gyroFrame.z);
 		
 		dev.sendAbs(accelFrame.x,accelFrame.y,accelFrame.z,gyroFrame.x,gyroFrame.y,gyroFrame.z);
-		if (config.rate > 0) {
-			std::this_thread::sleep_for(std::chrono::milliseconds((1000/config.rate)));
+		if (sleep_ms) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(sleep_ms));
 		}
 	}
 	std::cout<<std::endl<<"Restoring original rate..."<<std::endl;

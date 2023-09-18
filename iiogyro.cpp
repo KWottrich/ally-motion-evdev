@@ -46,9 +46,13 @@ Gyro::Frame Gyro::getFrame()
 {
 	Frame frame;
 	bool status;
-	frame.x = readFile(fileX, status)*scale;
-	frame.y = readFile(fileY, status)*scale;
-	frame.z = readFile(fileZ, status)*scale;
+	frame.x = readFile(fileX, status);
+	frame.y = readFile(fileY, status);
+	frame.z = readFile(fileZ, status);
+	std::cout<<"\33[2K\rRAW: X="<<frame.x<<" Y="<<frame.y<<" Z="<<frame.z<<std::endl<<std::flush;
+	frame.x *= scale;
+	frame.y *= scale;
+	frame.z *= scale;
 	return frame;
 }
 
