@@ -183,7 +183,8 @@ short Gyro::readRaw(const std::string& fileName, bool& status)
 	}
 
 	fclose(fd);
-	return buff[0];
+	// swap endian
+	return (buff[0]>>8) | (buff[0]<<8);
 }
 
 Gyro::~Gyro()
