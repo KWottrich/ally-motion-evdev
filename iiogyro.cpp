@@ -176,7 +176,7 @@ short Gyro::readRaw(const std::string& fileName, bool& status)
 	}
 
 	int bytesRead = fread(buff,sizeof(short),1,fd);
-	if (sizeof(short) != bytesRead)
+	if (bytesRead == 0)
 	{
 		std::cerr<<"failed to read from "<<fileName<<" (read "<<bytesRead<<" instead of "<<sizeof(short)<<")"<<std::endl;
 		return 0;
