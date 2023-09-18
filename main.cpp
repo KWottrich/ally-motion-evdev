@@ -105,6 +105,9 @@ int main(int argc, char** argv)
 			gyroFrame.z = 0;
 		*/
 		dev.sendAbs(accelFrame.x,accelFrame.y,accelFrame.z,gyroFrame.x,gyroFrame.y,gyroFrame.z);
+		if (config.rate > 0) {
+			std::this_thread::sleep_for(std::chrono::milliseconds((1000/config.rate)));
+		}
 	}
 	std::cout<<std::endl<<"Restoring original rate..."<<std::endl;
 	

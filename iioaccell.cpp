@@ -31,6 +31,14 @@ bool Accelerometer::openDevice(const std::string& device)
 		std::cerr<<"in_accel_z_raw is required but not availble\n";
 		return false;
 	}
+
+	xScale = readFile(deviceDir + "/in_accel_scale", status);
+	if(status) 
+	{
+		yScale = xScale;
+		zScale = xScale;
+		return true;
+	}
 	
 	xScale = readFile(deviceDir + "/in_accel_x_scale", status);
 	if(!status) 
