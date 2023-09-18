@@ -20,7 +20,7 @@ bool Gyro::openDevice(const std::string& device)
 	fileX.close();
 	
 	fileY.open(deviceDir + "/in_anglvel_y_raw", std::ios_base::in);
-	if(!fileX.is_open())
+	if(!fileY.is_open())
 	{
 		std::cerr<<"in_anglvel_y_raw is required but not availble\n";
 		return false;
