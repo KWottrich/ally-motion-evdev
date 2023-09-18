@@ -89,7 +89,7 @@ int main(int argc, char** argv)
 		Gyro::Frame gyroFrame = gyro.getFrame();
 		gyroFrame.scale(GYRO_SCALE);
 		std::cout<<"\33[2K\r";
-		printf("%+04.6f | %+04.6f | %+04.6f", gyroFrame.x, gyroFrame.y, gyroFrame.z);
+		printf("%+012.6f | %+012.6f | %+012.6f", gyroFrame.x, gyroFrame.y, gyroFrame.z);
 		std::cout<<std::flush;
 		if (abs(gyroFrame.x) > maxGyroX)
 			maxGyroX = abs(gyroFrame.x);
@@ -97,14 +97,7 @@ int main(int argc, char** argv)
 			maxGyroY = abs(gyroFrame.y);
 		if (abs(gyroFrame.z) > maxGyroZ)
 			maxGyroZ = abs(gyroFrame.z);
-		/*
-		if(abs(gyroFrame.x) > 512)
-			gyroFrame.x = 0;
-		if(abs(gyroFrame.y) > 512)
-			gyroFrame.y = 0;
-		if(abs(gyroFrame.z) > 512)
-			gyroFrame.z = 0;
-		*/
+		
 		dev.sendAbs(accelFrame.x,accelFrame.y,accelFrame.z,gyroFrame.x,gyroFrame.y,gyroFrame.z);
 		if (config.rate > 0) {
 			std::this_thread::sleep_for(std::chrono::milliseconds((1000/config.rate)));
