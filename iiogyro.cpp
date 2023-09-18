@@ -54,7 +54,7 @@ Gyro::Frame Gyro::getFrame()
 	int x = readRaw(deviceDir + "/in_anglvel_x_raw", status);
 	int y = readRaw(deviceDir + "/in_anglvel_y_raw", status);
 	int z = readRaw(deviceDir + "/in_anglvel_z_raw", status);
-	//std::cout<<"\33[2K\rRAW: X="<<x<<" Y="<<y<<" Z="<<z<<std::flush;
+	std::cout<<"\33[2K\rRAW: X="<<x<<" Y="<<y<<" Z="<<z<<std::flush;
 	frame.x = scale*x;
 	frame.y = scale*y;
 	frame.z = scale*z;
@@ -185,15 +185,6 @@ int Gyro::readRaw(const std::string& fileName, bool& status)
 	fclose(fd);
 
 	buff[6] = '\0'; //null-terminate the string
-	if (fileName == deviceDir + "/in_anglvel_x_raw")
-	{
-		std::cout<<"\33[2K\r"<<fileName<<": |";
-		for (int i = 0; i < 6; i++) {
-			printf("%c|", buff[i]);
-		}
-		std::cout<<std::endl<<std::flush;
-	}
-
 	int result = 0;
 	sscanf(buff, "%d", &result);
 	status = result;
