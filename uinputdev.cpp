@@ -8,7 +8,7 @@
 
 #include "uinputdev.h"
 
-#define GYRO_RANGE 2000 // max range is +/- 125 degrees/s
+#define GYRO_RANGE 2000 // max range is +/- 2000 degrees/s
 
 UinputDevice::UinputDevice()
 {
@@ -28,7 +28,9 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	
 	ioctl(fd, UI_SET_PROPBIT, INPUT_PROP_ACCELEROMETER);
 	ioctl(fd, UI_SET_EVBIT, EV_ABS);
-	ioctl(fd, UI_SET_MSCBIT, MSC_TIMESTAMP);
+	ioctl(fd, UI_SET_EVBIT, EV_KEY);
+	ioctl(fd, UI_SET_EVBIT, EV_MSC);
+	//ioctl(fd, UI_SET_MSCBIT, MSC_TIMESTAMP);
 
 	ioctl(fd, UI_SET_ABSBIT, ABS_X);
 	ioctl(fd, UI_SET_ABSBIT, ABS_Y);
