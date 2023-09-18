@@ -51,9 +51,9 @@ Gyro::Frame Gyro::getFrame()
 {
 	Frame frame;
 	bool status;
-	short x = readRaw(deviceDir + "/in_anglvel_x_raw", status);
-	short y = readRaw(deviceDir + "/in_anglvel_y_raw", status);
-	short z = readRaw(deviceDir + "/in_anglvel_z_raw", status);
+	int x = readRaw(deviceDir + "/in_anglvel_x_raw", status);
+	int y = readRaw(deviceDir + "/in_anglvel_y_raw", status);
+	int z = readRaw(deviceDir + "/in_anglvel_z_raw", status);
 	std::cout<<"\33[2K\rRAW: X="<<x<<" Y="<<y<<" Z="<<z<<std::flush;
 	frame.x = scale*x;
 	frame.y = scale*y;
@@ -161,10 +161,10 @@ double Gyro::readFile(std::fstream& file, bool& status)
 	return result;
 }
 
-short Gyro::readRaw(const std::string& fileName, bool& status)
+int Gyro::readRaw(const std::string& fileName, bool& status)
 {
 	FILE* fd = NULL;
-	short buff[1];
+	char buff[7];
 	memset(buff,0,sizeof(buff));
 
 	fd = fopen(fileName.c_str(),"r");
@@ -175,15 +175,18 @@ short Gyro::readRaw(const std::string& fileName, bool& status)
 		return 0;
 	}
 
-	int numRead = fread(buff,sizeof(short),1,fd);
-	if (numRead != 1)
+	int numRead = fread(buff,sizeof(char),6,fd);
+	if (numRead == 0)
 	{
-		std::cerr<<"failed to read from "<<fileName<<" (read "<<numRead<<" instead of 1)"<<std::endl;
+		std::cerr<<"failed to read from "<<fileName<<std::endl;
 		return 0;
 	}
 
 	fclose(fd);
-	return buff[0];
+	buff[6] = '\0'; //null-terminate the string
+	int result = 0;
+	sscanf(buff, "%d", &result);
+	return result;
 }
 
 Gyro::~Gyro()

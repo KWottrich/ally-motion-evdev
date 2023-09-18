@@ -31,7 +31,7 @@ private:
 	std::string deviceDir;
 	
 	double readFile(const std::string& fileName, bool& status);
-	short readRaw(const std::string& fileName, bool& status);
+	int readRaw(const std::string& fileName, bool& status);
 	double readFile(std::fstream& file, bool& status);
 	
 public:
