@@ -185,7 +185,7 @@ int Gyro::readRaw(const std::string& fileName, bool& status)
 		status = false;
 		return 0;
 	}*/
-	memcpy(buff, fd->_IO_read_ptr, 6);
+	memcpy(buff, fd->_IO_read_ptr--, 6);
 	fclose(fd);
 
 	buff[6] = '\0'; //null-terminate the string
