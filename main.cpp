@@ -90,6 +90,7 @@ int main(int argc, char** argv)
 		gyroFrame.scale(GYRO_SCALE);
 		std::cout<<"\33[2K\r";
 		printf("%+4.9f | %+4.9f | %+4.9f", gyroFrame.x, gyroFrame.y, gyroFrame.z);
+		std::cout<<std::flush;
 		if (abs(gyroFrame.x) > maxGyroX)
 			maxGyroX = abs(gyroFrame.x);
 		if (abs(gyroFrame.y) > maxGyroY)
