@@ -164,10 +164,10 @@ double Gyro::readFile(std::fstream& file, bool& status)
 int Gyro::readRaw(const std::string& fileName, bool& status)
 {
 	FILE* fd = NULL;
-	char buff[7];
-	memset(buff,0,sizeof(buff));
+	char buff[7]; // 6 characters for sign and 5 digits, plus one for null-terminator
+	memset(buff, 0, sizeof(buff));
 
-	fd = fopen(fileName.c_str(),"r");
+	fd = fopen(fileName.c_str(), "r");
 
 	if (NULL == fd)
 	{
@@ -175,17 +175,19 @@ int Gyro::readRaw(const std::string& fileName, bool& status)
 		return 0;
 	}
 
-	int numRead = fread(buff,sizeof(char),6,fd);
+	int numRead = fread(buff, sizeof(char), 6, fd);
 	if (numRead == 0)
 	{
 		std::cerr<<"failed to read from "<<fileName<<std::endl;
+		status = false;
 		return 0;
 	}
-
 	fclose(fd);
+
 	buff[6] = '\0'; //null-terminate the string
 	int result = 0;
 	sscanf(buff, "%d", &result);
+	status = result;
 	return result;
 }
 
