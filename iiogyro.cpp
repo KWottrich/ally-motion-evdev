@@ -51,13 +51,13 @@ Gyro::Frame Gyro::getFrame()
 {
 	Frame frame;
 	bool status;
-	frame.x = static_cast<double>(readRaw(deviceDir + "/in_anglvel_x_raw", status));
-	frame.y = static_cast<double>(readRaw(deviceDir + "/in_anglvel_y_raw", status));
-	frame.z = static_cast<double>(readRaw(deviceDir + "/in_anglvel_z_raw", status));
-	std::cout<<"\33[2K\rRAW: X="<<frame.x<<" Y="<<frame.y<<" Z="<<frame.z<<std::flush;
-	frame.x *= scale;
-	frame.y *= scale;
-	frame.z *= scale;
+	short x = readRaw(deviceDir + "/in_anglvel_x_raw", status);
+	short y = readRaw(deviceDir + "/in_anglvel_y_raw", status);
+	short z = readRaw(deviceDir + "/in_anglvel_z_raw", status);
+	std::cout<<"\33[2K\rRAW: X="<<x<<" Y="<<y<<" Z="<<z<<std::flush;
+	frame.x = scale*x;
+	frame.y = scale*y;
+	frame.z = scale*z;
 	return frame;
 }
 
@@ -183,8 +183,7 @@ short Gyro::readRaw(const std::string& fileName, bool& status)
 	}
 
 	fclose(fd);
-	// swap endian
-	return (buff[0]>>8) | (buff[0]<<8);
+	return buff[0];
 }
 
 Gyro::~Gyro()
