@@ -17,6 +17,7 @@ bool Gyro::openDevice(const std::string& device)
 		std::cerr<<"in_anglvel_x_raw is required but not availble\n";
 		return false;
 	}
+	fileX.close();
 	
 	fileY.open(deviceDir + "/in_anglvel_y_raw", std::ios_base::in);
 	if(!fileX.is_open())
@@ -24,6 +25,7 @@ bool Gyro::openDevice(const std::string& device)
 		std::cerr<<"in_anglvel_y_raw is required but not availble\n";
 		return false;
 	}
+	fileY.close();
 	
 	fileZ.open(deviceDir + "/in_anglvel_z_raw", std::ios_base::in);
 	if(!fileZ.is_open())
@@ -31,6 +33,7 @@ bool Gyro::openDevice(const std::string& device)
 		std::cerr<<"in_anglvel_z_raw is required but not availble\n";
 		return false;
 	}
+	fileZ.close();
 	
 	scale = readFile(deviceDir + "/in_anglvel_scale", status);
 	if(!status) 
@@ -46,9 +49,9 @@ Gyro::Frame Gyro::getFrame()
 {
 	Frame frame;
 	bool status;
-	frame.x = readFile(fileX, status);
-	frame.y = readFile(fileY, status);
-	frame.z = readFile(fileZ, status);
+	frame.x = readFile(deviceDir + "/in_anglvel_x_raw", status);
+	frame.y = readFile(deviceDir + "/in_anglvel_y_raw", status);
+	frame.z = readFile(deviceDir + "/in_anglvel_z_raw", status);
 	std::cout<<"\33[2K\rRAW: X="<<frame.x<<" Y="<<frame.y<<" Z="<<frame.z<<std::flush;
 	frame.x *= scale;
 	frame.y *= scale;
