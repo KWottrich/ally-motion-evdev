@@ -35,6 +35,7 @@ private:
 	double readFile(std::fstream& file, bool& status);
 	
 public:
+	int maxX;
 	
 	static std::string findGyro();
 	bool openDevice(const std::string& device);

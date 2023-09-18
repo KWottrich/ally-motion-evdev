@@ -20,6 +20,7 @@ bool Gyro::openDevice(const std::string& device)
 		return false;
 	}
 	fileX.close();
+	maxX = 0;
 	
 	fileY.open(deviceDir + "/in_anglvel_y_raw", std::ios_base::in);
 	if(!fileY.is_open())
@@ -55,6 +56,8 @@ Gyro::Frame Gyro::getFrame()
 	int y = readRaw(deviceDir + "/in_anglvel_y_raw", status);
 	int z = readRaw(deviceDir + "/in_anglvel_z_raw", status);
 	std::cout<<"\33[2K\rRAW: X="<<x<<" Y="<<y<<" Z="<<z<<std::flush;
+	if (abs(x) > maxX)
+		maxX = abs(x);
 	frame.x = scale*x;
 	frame.y = scale*y;
 	frame.z = scale*z;

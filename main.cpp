@@ -117,6 +117,7 @@ int main(int argc, char** argv)
 	std::cout<<"X: "<<maxGyroX<<std::endl;
 	std::cout<<"Y: "<<maxGyroY<<std::endl;
 	std::cout<<"Z: "<<maxGyroZ<<std::endl;
+	std::cout<<"Max RAW X value read: "<<gyro.maxX<<std::endl;
 	
 	return 0;
 }
