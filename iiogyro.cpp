@@ -178,8 +178,8 @@ int Gyro::readRaw(const std::string& fileName, bool& status)
 		return 0;
 	}
 
-	int numRead = fread(buff, sizeof(char), 6, fd);
-	if (numRead == 0)
+	int numRead = fread(buff, sizeof(char)*6, 1, fd);
+	if (numRead <= 0)
 	{
 		std::cerr<<"failed to read from "<<fileName<<std::endl;
 		status = false;
