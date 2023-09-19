@@ -52,9 +52,9 @@ Gyro::Frame Gyro::getFrame()
 {
 	Frame frame;
 	bool status;
-	int x = readRaw(deviceDir + "/in_anglvel_x_raw", status);
-	int y = readRaw(deviceDir + "/in_anglvel_y_raw", status);
-	int z = readRaw(deviceDir + "/in_anglvel_z_raw", status);
+	int x = readCmd(deviceDir + "/in_anglvel_x_raw", status);
+	int y = readCmd(deviceDir + "/in_anglvel_y_raw", status);
+	int z = readCmd(deviceDir + "/in_anglvel_z_raw", status);
 	std::cout<<"\33[2K\rRAW: X="<<x<<" Y="<<y<<" Z="<<z<<std::flush;
 	if (abs(x) > maxX)
 		maxX = abs(x);
@@ -190,6 +190,31 @@ int Gyro::readRaw(const std::string& fileName, bool& status)
 	buff[6] = '\0'; //null-terminate the string
 	int result = 0;
 	sscanf(buff, "%d", &result);
+	status = result;
+	return result;
+}
+
+int Gyro::readCmd(const std::string& fileName, bool& status)
+{
+	char cat[] = "cat ";
+	char* cat_cmd = strcat(cat, fileName.c_str());
+
+	char buffer[8];
+    std::string cat_output = "";
+    FILE* pipe = popen(cat_cmd, "r");
+    if (!pipe) throw std::runtime_error("popen() failed!");
+    try {
+        while (fgets(buffer, sizeof(buffer), pipe) != NULL) {
+            cat_output += buffer;
+        }
+    } catch (...) {
+        pclose(pipe);
+        throw;
+    }
+    pclose(pipe);
+
+	int result = 0;
+	sscanf(cat_output.c_str(), "%d", &result);
 	status = result;
 	return result;
 }
