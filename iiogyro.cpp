@@ -196,8 +196,8 @@ int Gyro::readRaw(const std::string& fileName, bool& status)
 
 int Gyro::readCmd(const std::string& fileName, bool& status)
 {
-	char cat[] = "cat ";
-	char* cat_cmd = strcat(cat, fileName.c_str());
+	char cat_cmd[100] = "cat ";
+	strcat(cat_cmd, fileName.c_str());
 
 	char buffer[8];
     std::string cat_output = "";
