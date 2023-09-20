@@ -33,11 +33,8 @@ private:
 	double readFile(const std::string& fileName, bool& status);
 	double readFile(std::fstream& file, bool& status);
 	int readRaw(const std::string& fileName, bool& status);
-	int readCmd(const std::string& fileName, bool& status);
 	
 public:
-	int maxX;
-	
 	static std::string findGyro();
 	bool openDevice(const std::string& device);
 	bool setRate(unsigned int rate);

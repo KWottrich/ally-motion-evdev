@@ -71,14 +71,13 @@ int main(int argc, char** argv)
 	{
 		accel.setRate(config.rate);
 		gyro.setRate(config.rate);
-		//sleep_ms = 1000/config.rate;
-		sleep_ms = 1000;
+		sleep_ms = 1000/config.rate;
 		std::cout<<"Setting sleep between frames at "<<sleep_ms<<"ms"<<std::endl;
 	}
 	gyro.setScale(0.00106);
 	
 	double maxGyroX = 0, maxGyroY = 0, maxGyroZ = 0;
-	//std::cout<<"   Gyro X    |    Gyro Y    |    Gyro Z"<<std::endl;
+	std::cout<<"   Gyro X    |    Gyro Y    |    Gyro Z"<<std::endl;
 
 	while(!stop)
 	{
@@ -92,10 +91,10 @@ int main(int argc, char** argv)
 			accelFrame.z = 0;
 		
 		Gyro::Frame gyroFrame = gyro.getFrame();
-		gyroFrame.scale(GYRO_SCALE);
-		//std::cout<<"\33[2K\r";
-		//printf("%+012.6f | %+012.6f | %+012.6f", gyroFrame.x, gyroFrame.y, gyroFrame.z);
-		//std::cout<<std::flush;
+		gyroFrame.scale(GYRO_SCALE); // Convert radians/s to degrees/s
+		std::cout<<"\33[2K\r";
+		printf("%+012.6f | %+012.6f | %+012.6f", gyroFrame.x, gyroFrame.y, gyroFrame.z);
+		std::cout<<std::flush;
 		if (abs(gyroFrame.x) > maxGyroX)
 			maxGyroX = abs(gyroFrame.x);
 		if (abs(gyroFrame.y) > maxGyroY)
@@ -117,7 +116,6 @@ int main(int argc, char** argv)
 	std::cout<<"X: "<<maxGyroX<<std::endl;
 	std::cout<<"Y: "<<maxGyroY<<std::endl;
 	std::cout<<"Z: "<<maxGyroZ<<std::endl;
-	std::cout<<"Max RAW X value read: "<<gyro.maxX<<std::endl;
 	
 	return 0;
 }

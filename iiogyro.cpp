@@ -16,27 +16,26 @@ bool Gyro::openDevice(const std::string& device)
 	fileX.open(deviceDir + "/in_anglvel_x_raw", std::ios_base::in);
 	if(!fileX.is_open())
 	{
-		std::cerr<<"in_anglvel_x_raw is required but not availble\n";
+		std::cerr<<"in_anglvel_x_raw is required but not available\n";
 		return false;
 	}
-	fileX.close();
-	maxX = 0;
+	//fileX.close();
 	
 	fileY.open(deviceDir + "/in_anglvel_y_raw", std::ios_base::in);
 	if(!fileY.is_open())
 	{
-		std::cerr<<"in_anglvel_y_raw is required but not availble\n";
+		std::cerr<<"in_anglvel_y_raw is required but not available\n";
 		return false;
 	}
-	fileY.close();
+	//fileY.close();
 	
 	fileZ.open(deviceDir + "/in_anglvel_z_raw", std::ios_base::in);
 	if(!fileZ.is_open())
 	{
-		std::cerr<<"in_anglvel_z_raw is required but not availble\n";
+		std::cerr<<"in_anglvel_z_raw is required but not available\n";
 		return false;
 	}
-	fileZ.close();
+	//fileZ.close();
 	
 	scale = readFile(deviceDir + "/in_anglvel_scale", status);
 	if(!status) 
@@ -52,15 +51,9 @@ Gyro::Frame Gyro::getFrame()
 {
 	Frame frame;
 	bool status;
-	int x = readCmd(deviceDir + "/in_anglvel_x_raw", status);
-	int y = readCmd(deviceDir + "/in_anglvel_y_raw", status);
-	int z = readCmd(deviceDir + "/in_anglvel_z_raw", status);
-	std::cout<<"\33[2K\rRAW: X="<<x<<" Y="<<y<<" Z="<<z<<std::flush;
-	if (abs(x) > maxX)
-		maxX = abs(x);
-	frame.x = scale*x;
-	frame.y = scale*y;
-	frame.z = scale*z;
+	frame.x = readFile(fileX, status)*scale;
+	frame.y = readFile(fileY, status)*scale;
+	frame.z = readFile(fileZ, status)*scale;
 	return frame;
 }
 
@@ -190,31 +183,6 @@ int Gyro::readRaw(const std::string& fileName, bool& status)
 	buff[6] = '\0'; //null-terminate the string
 	int result = 0;
 	sscanf(buff, "%d", &result);
-	status = result;
-	return result;
-}
-
-int Gyro::readCmd(const std::string& fileName, bool& status)
-{
-	char cat_cmd[100] = "cat ";
-	strcat(cat_cmd, fileName.c_str());
-
-	char buffer[8];
-    std::string cat_output = "";
-    FILE* pipe = popen(cat_cmd, "r");
-    if (!pipe) throw std::runtime_error("popen() failed!");
-    try {
-        while (fgets(buffer, sizeof(buffer), pipe) != NULL) {
-            cat_output += buffer;
-        }
-    } catch (...) {
-        pclose(pipe);
-        throw;
-    }
-    pclose(pipe);
-
-	int result = 0;
-	sscanf(cat_output.c_str(), "%d", &result);
 	status = result;
 	return result;
 }
