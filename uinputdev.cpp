@@ -8,7 +8,8 @@
 
 #include "uinputdev.h"
 
-#define GYRO_RANGE 2000 // max range is +/- 35 radian/s
+#define ACCEL_RANGE 512
+#define GYRO_RANGE  2000 // max range is +/- 35 radian/s
 
 UinputDevice::UinputDevice()
 {
@@ -44,26 +45,29 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	
 	struct uinput_abs_setup devAbsX = {0};
 	devAbsX.code = ABS_X;
-	devAbsX.absinfo.minimum = -512;
-	devAbsX.absinfo.maximum = 512;
-	devAbsX.absinfo.flat = 5;
-	devAbsX.absinfo.fuzz = 2;
+	devAbsX.absinfo.minimum = -ACCEL_RANGE;
+	devAbsX.absinfo.maximum = ACCEL_RANGE;
+	devAbsX.absinfo.resolution = 255; // 255 units = 1g
+	devAbsX.absinfo.fuzz = 5;
+	devAbsX.absinfo.flat = 0;
 	if(ioctl(fd, UI_ABS_SETUP, &devAbsX) < 0) return false;
 
 	struct uinput_abs_setup devAbsY = {0};
 	devAbsY.code = ABS_Y;
-	devAbsY.absinfo.minimum = -512;
-	devAbsY.absinfo.maximum = 512;
-	devAbsY.absinfo.flat = 5;
-	devAbsY.absinfo.fuzz = 0;
+	devAbsY.absinfo.minimum = -ACCEL_RANGE;
+	devAbsY.absinfo.maximum = ACCEL_RANGE;
+	devAbsY.absinfo.resolution = 255; // 255 units = 1g
+	devAbsY.absinfo.fuzz = 5;
+	devAbsY.absinfo.flat = 0;
 	if(ioctl(fd, UI_ABS_SETUP, &devAbsY) < 0) return false;
 	
 	struct uinput_abs_setup devAbsZ = {0};
 	devAbsZ.code = ABS_Z;
-	devAbsZ.absinfo.minimum = -512;
-	devAbsZ.absinfo.maximum = 512;
-	devAbsZ.absinfo.flat = 5;
-	devAbsZ.absinfo.fuzz = 0;
+	devAbsZ.absinfo.minimum = -ACCEL_RANGE;
+	devAbsZ.absinfo.maximum = ACCEL_RANGE;
+	devAbsZ.absinfo.resolution = 255; // 255 units = 1g
+	devAbsZ.absinfo.fuzz = 5;
+	devAbsZ.absinfo.flat = 0;
 	if(ioctl(fd, UI_ABS_SETUP, &devAbsZ) < 0) return false;
 	
 	struct uinput_abs_setup devAbsRX = {0};

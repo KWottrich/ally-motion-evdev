@@ -10,8 +10,8 @@
 #include "iiogyro.h"
 #include "argpopt.h"
 
-#define ACCEL_SCALE 255/9.81
-#define GYRO_SCALE 180/M_PI
+#define ACCEL_SCALE 255/9.81 // scale m/s^2 to g's, and scale to increase precision when passed as an int
+#define GYRO_SCALE 180/M_PI // Conversion factor for radians -> degrees
 #define DEVNAME "VirtMotionController"
 
 bool stop = false;
