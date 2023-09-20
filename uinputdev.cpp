@@ -8,7 +8,7 @@
 
 #include "uinputdev.h"
 
-#define GYRO_RANGE 35 // max range is +/- 35 radian/s
+#define GYRO_RANGE 2000 // max range is +/- 35 radian/s
 
 UinputDevice::UinputDevice()
 {
@@ -26,10 +26,10 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	dev.id.vendor = vendor;
 	dev.id.product = product;
 	
-	//ioctl(fd, UI_SET_PROPBIT, INPUT_PROP_ACCELEROMETER);
+	ioctl(fd, UI_SET_PROPBIT, INPUT_PROP_ACCELEROMETER);
 	ioctl(fd, UI_SET_EVBIT, EV_ABS);
 	ioctl(fd, UI_SET_EVBIT, EV_KEY);
-	//ioctl(fd, UI_SET_EVBIT, EV_MSC);
+	ioctl(fd, UI_SET_EVBIT, EV_MSC);
 	//ioctl(fd, UI_SET_MSCBIT, MSC_TIMESTAMP);
 
 	ioctl(fd, UI_SET_ABSBIT, ABS_X);
@@ -70,7 +70,7 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	devAbsRX.code = ABS_RX;
 	devAbsRX.absinfo.minimum = -GYRO_RANGE;
 	devAbsRX.absinfo.maximum = GYRO_RANGE;
-	devAbsRX.absinfo.resolution = 1; // 1 unit = 1 radian/s
+	devAbsRX.absinfo.resolution = 1; // 1 unit = 1 degree/s
 	devAbsRX.absinfo.fuzz = 16;
 	devAbsRX.absinfo.flat = 0;
 	if(ioctl(fd, UI_ABS_SETUP, &devAbsRX) < 0) return false;
@@ -79,7 +79,7 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	devAbsRY.code = ABS_RY;
 	devAbsRY.absinfo.minimum = -GYRO_RANGE;
 	devAbsRY.absinfo.maximum = GYRO_RANGE;
-	devAbsRY.absinfo.resolution = 1; // 1 unit = 1 radian/s
+	devAbsRY.absinfo.resolution = 1; // 1 unit = 1 degree/s
 	devAbsRY.absinfo.fuzz = 16;
 	devAbsRY.absinfo.flat = 0;
 	if(ioctl(fd, UI_ABS_SETUP, &devAbsRY) < 0) return false;
@@ -88,7 +88,7 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	devAbsRZ.code = ABS_RZ;
 	devAbsRZ.absinfo.minimum = -GYRO_RANGE;
 	devAbsRZ.absinfo.maximum = GYRO_RANGE;
-	devAbsRZ.absinfo.resolution = 1; // 1 unit = 1 radian/s
+	devAbsRZ.absinfo.resolution = 1; // 1 unit = 1 degree/s
 	devAbsRZ.absinfo.fuzz = 16;
 	devAbsRZ.absinfo.flat = 0;
 	if(ioctl(fd, UI_ABS_SETUP, &devAbsRZ) < 0) return false;
@@ -122,6 +122,7 @@ bool UinputDevice::sendAbs(int x, int y, int z, int rx, int ry, int rz)
 	if(write(fd, &ev, sizeof(ev)) != sizeof(ev)) 
 		return false;
 	
+	ev.type = EV_MSC; // Gyro is miscellaneous input
 	ev.code = ABS_RX;
 	ev.value = rx;
 	if(write(fd, &ev, sizeof(ev)) != sizeof(ev)) 

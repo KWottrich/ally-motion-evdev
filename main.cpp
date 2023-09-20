@@ -11,7 +11,7 @@
 #include "argpopt.h"
 
 #define ACCEL_SCALE 255/9.81
-#define GYRO_SCALE 5
+#define GYRO_SCALE 180/M_PI
 #define DEVNAME "VirtMotionController"
 
 bool stop = false;
