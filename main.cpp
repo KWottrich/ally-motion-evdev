@@ -91,7 +91,7 @@ int main(int argc, char** argv)
 			accelFrame.z = 0;
 		
 		Gyro::Frame gyroFrame = gyro.getFrame();
-		gyroFrame.scale(GYRO_SCALE); // Convert radians/s to degrees/s
+		//gyroFrame.scale(GYRO_SCALE); // Convert radians/s to degrees/s
 		std::cout<<"\33[2K\r";
 		printf("%+012.6f | %+012.6f | %+012.6f", gyroFrame.x, gyroFrame.y, gyroFrame.z);
 		std::cout<<std::flush;
