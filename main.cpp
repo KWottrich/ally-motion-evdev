@@ -92,7 +92,7 @@ int main(int argc, char** argv)
 		int gyroY = static_cast<int>(gyroFrame.y);
 		int gyroZ = static_cast<int>(gyroFrame.z);
 		std::cout<<"\33[2K\r";
-		printf("  %+4d  |   %+4d  |   %+4d  | %+5d | %+5d | %+5d", accelX, accelY, accelZ, gyroX, gyroY, gyroZ);
+		printf("  %+4d  |   %+4d  |   %+4d  | %+5d  | %+5d  | %+5d", accelX, accelY, accelZ, gyroX, gyroY, gyroZ);
 		std::cout<<std::flush;
 		
 		dev.sendAbs(accelX,accelY,accelZ,gyroFrame.x,gyroFrame.y,gyroFrame.z);
