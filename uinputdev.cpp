@@ -8,7 +8,7 @@
 
 #include "uinputdev.h"
 
-#define GYRO_RANGE 2000 // max range is +/- 2000 degrees/s
+#define GYRO_RANGE 35 // max range is +/- 35 radian/s
 
 UinputDevice::UinputDevice()
 {
