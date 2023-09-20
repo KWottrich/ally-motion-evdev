@@ -17,7 +17,7 @@ UinputDevice::UinputDevice()
 
 bool UinputDevice::openDev(const std::string& uinputPath, const std::string& name, uint16_t vendor, uint16_t product)
 {
-	fd = open(uinputPath.c_str(), O_RDWR);
+	fd = open(uinputPath.c_str(), O_WRONLY | O_NONBLOCK);
 	if(fd < 0) return false;
 	
 	struct uinput_setup dev = {0};
