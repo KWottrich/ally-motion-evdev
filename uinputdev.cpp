@@ -30,8 +30,8 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	ioctl(fd, UI_SET_PROPBIT, INPUT_PROP_ACCELEROMETER);
 	ioctl(fd, UI_SET_EVBIT, EV_ABS);
 	//ioctl(fd, UI_SET_EVBIT, EV_KEY);
-	//ioctl(fd, UI_SET_EVBIT, EV_MSC);
-	//ioctl(fd, UI_SET_MSCBIT, MSC_TIMESTAMP);
+	ioctl(fd, UI_SET_EVBIT, EV_MSC);
+	ioctl(fd, UI_SET_MSCBIT, MSC_TIMESTAMP);
 
 	ioctl(fd, UI_SET_ABSBIT, ABS_X);
 	ioctl(fd, UI_SET_ABSBIT, ABS_Y);
@@ -100,6 +100,11 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 		
 	if(ioctl(fd, UI_DEV_SETUP, &dev) < 0) return false;
 	if(ioctl(fd, UI_DEV_CREATE) < 0) return false;
+
+	timeval now = {0};
+	gettimeofday(&now, NULL);
+	secAtInit = now.tv_sec;
+	usecAtInit = now.tv_usec;
 	
 	return true;
 }
@@ -140,8 +145,16 @@ bool UinputDevice::sendAbs(int x, int y, int z, int rx, int ry, int rz)
 	ev.value = rz;
 	if(write(fd, &ev, sizeof(ev)) != sizeof(ev)) 
 		return false;
+	
+	timeval now = {0};
+	gettimeofday(&now, NULL);
+	ev.type = EV_MSC;
+	ev.code = MSC_TIMESTAMP;
+	ev.value = (now.tv_sec - secAtInit)*1000000 + (now.tv_usec - usecAtInit);
+	if(write(fd, &ev, sizeof(ev)) != sizeof(ev)) 
+		return false;
 
-	gettimeofday(&ev.time, NULL);
+	ev.time = now;
 	ev.type = EV_SYN;
 	ev.code = SYN_REPORT;
 	ev.value = 0;

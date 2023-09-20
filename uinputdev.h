@@ -6,6 +6,8 @@ class UinputDevice
 {
 private:
 	int fd = -1;
+	int64_t secAtInit = 0;
+	int64_t usecAtInit = 0;
 	
 public:
 	UinputDevice();
