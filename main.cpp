@@ -10,7 +10,7 @@
 #include "iiogyro.h"
 #include "argpopt.h"
 
-#define ACCEL_SCALE 255/9.81 // scale m/s^2 to g's, and scale to increase precision when passed as an int
+#define ACCEL_SCALE 255/9.81 // scale m/s^2 to g's, and scale x255 to increase precision when passed as an int
 #define GYRO_SCALE 180/M_PI // Conversion factor for radians -> degrees
 #define DEVNAME "VirtMotionController"
 
@@ -76,47 +76,34 @@ int main(int argc, char** argv)
 	}
 	gyro.setScale(0.00106);
 	
-	double maxGyroX = 0, maxGyroY = 0, maxGyroZ = 0;
-	std::cout<<"   Gyro X    |    Gyro Y    |    Gyro Z"<<std::endl;
+	std::cout<<"Accel X | Accel Y | Accel Z | Gyro X | Gyro Y | Gyro Z"<<std::endl;
 
 	while(!stop)
 	{
 		Accelerometer::Frame accelFrame = accel.getFrame();
-		accelFrame.scale(ACCEL_SCALE);
-		/*
-		if(abs(accelFrame.x) > 512)
-			accelFrame.x = 0;
-		if(abs(accelFrame.y) > 512)
-			accelFrame.y = 0;
-		if(abs(accelFrame.z) > 512)
-			accelFrame.z = 0;
-		*/
+		accelFrame.scale(ACCEL_SCALE); // Convert m/s^2 to 255 * g
+		int accelX = static_cast<int>(accelFrame.x);
+		int accelY = static_cast<int>(accelFrame.y);
+		int accelZ = static_cast<int>(accelFrame.z);
+
 		Gyro::Frame gyroFrame = gyro.getFrame();
 		gyroFrame.scale(GYRO_SCALE); // Convert radians/s to degrees/s
+		int gyroX = static_cast<int>(gyroFrame.x);
+		int gyroY = static_cast<int>(gyroFrame.y);
+		int gyroZ = static_cast<int>(gyroFrame.z);
 		std::cout<<"\33[2K\r";
-		printf("%+012.6f | %+012.6f | %+012.6f", gyroFrame.x, gyroFrame.y, gyroFrame.z);
+		printf("  %+4d  |  %+4d  |  %+4d  | %+5d | %+5d | %+5d", accelX, accelY, accelZ, gyroX, gyroY, gyroZ);
 		std::cout<<std::flush;
-		if (abs(gyroFrame.x) > maxGyroX)
-			maxGyroX = abs(gyroFrame.x);
-		if (abs(gyroFrame.y) > maxGyroY)
-			maxGyroY = abs(gyroFrame.y);
-		if (abs(gyroFrame.z) > maxGyroZ)
-			maxGyroZ = abs(gyroFrame.z);
 		
-		dev.sendAbs(accelFrame.x,accelFrame.y,accelFrame.z,gyroFrame.x,gyroFrame.y,gyroFrame.z);
+		dev.sendAbs(accelX,accelY,accelZ,gyroFrame.x,gyroFrame.y,gyroFrame.z);
 		if (sleep_ms) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(sleep_ms));
 		}
 	}
+
 	std::cout<<std::endl<<"Restoring original rate..."<<std::endl;
-	
 	accel.setRate(startingAccelRate);
 	gyro.setRate(startingGyroRate);
-
-	std::cout<<"Max gyro values reported:"<<std::endl;
-	std::cout<<"X: "<<maxGyroX<<std::endl;
-	std::cout<<"Y: "<<maxGyroY<<std::endl;
-	std::cout<<"Z: "<<maxGyroZ<<std::endl;
 	
 	return 0;
 }
