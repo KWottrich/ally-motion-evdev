@@ -11,7 +11,7 @@
 #include "argpopt.h"
 
 #define ACCEL_SCALE 255/9.81
-#define GYRO_SCALE 180/M_PI
+#define GYRO_SCALE 5
 #define DEVNAME "VirtMotionController"
 
 bool stop = false;
@@ -91,7 +91,7 @@ int main(int argc, char** argv)
 			accelFrame.z = 0;
 		
 		Gyro::Frame gyroFrame = gyro.getFrame();
-		//gyroFrame.scale(GYRO_SCALE); // Convert radians/s to degrees/s
+		gyroFrame.scale(GYRO_SCALE); // Convert radians/s to degrees/s
 		std::cout<<"\33[2K\r";
 		printf("%+012.6f | %+012.6f | %+012.6f", gyroFrame.x, gyroFrame.y, gyroFrame.z);
 		std::cout<<std::flush;
