@@ -27,7 +27,7 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	dev.id.product = product;
 	
 	ioctl(fd, UI_SET_PROPBIT, INPUT_PROP_ACCELEROMETER);
-	//ioctl(fd, UI_SET_EVBIT, EV_ABS);
+	ioctl(fd, UI_SET_EVBIT, EV_ABS);
 	//ioctl(fd, UI_SET_EVBIT, EV_KEY);
 	ioctl(fd, UI_SET_EVBIT, EV_MSC);
 	//ioctl(fd, UI_SET_MSCBIT, MSC_TIMESTAMP);
@@ -122,7 +122,7 @@ bool UinputDevice::sendAbs(int x, int y, int z, int rx, int ry, int rz)
 	if(write(fd, &ev, sizeof(ev)) != sizeof(ev)) 
 		return false;
 	*/
-	ev.type = EV_MSC; // Gyro is miscellaneous input
+	ev.type = EV_ABS;
 	ev.code = ABS_RX;
 	ev.value = rx;
 	if(write(fd, &ev, sizeof(ev)) != sizeof(ev)) 
