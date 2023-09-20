@@ -26,7 +26,7 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	dev.id.vendor = vendor;
 	dev.id.product = product;
 	
-	ioctl(fd, UI_SET_PROPBIT, INPUT_PROP_ACCELEROMETER);
+	//ioctl(fd, UI_SET_PROPBIT, INPUT_PROP_ACCELEROMETER);
 	ioctl(fd, UI_SET_EVBIT, EV_ABS);
 	ioctl(fd, UI_SET_EVBIT, EV_KEY);
 	//ioctl(fd, UI_SET_EVBIT, EV_MSC);
