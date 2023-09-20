@@ -83,13 +83,14 @@ int main(int argc, char** argv)
 	{
 		Accelerometer::Frame accelFrame = accel.getFrame();
 		accelFrame.scale(ACCEL_SCALE);
+		/*
 		if(abs(accelFrame.x) > 512)
 			accelFrame.x = 0;
 		if(abs(accelFrame.y) > 512)
 			accelFrame.y = 0;
 		if(abs(accelFrame.z) > 512)
 			accelFrame.z = 0;
-		
+		*/
 		Gyro::Frame gyroFrame = gyro.getFrame();
 		gyroFrame.scale(GYRO_SCALE); // Convert radians/s to degrees/s
 		std::cout<<"\33[2K\r";

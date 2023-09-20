@@ -32,16 +32,16 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	//ioctl(fd, UI_SET_EVBIT, EV_MSC);
 	//ioctl(fd, UI_SET_MSCBIT, MSC_TIMESTAMP);
 
-	//ioctl(fd, UI_SET_ABSBIT, ABS_X);
-	//ioctl(fd, UI_SET_ABSBIT, ABS_Y);
-	//ioctl(fd, UI_SET_ABSBIT, ABS_Z);
+	ioctl(fd, UI_SET_ABSBIT, ABS_X);
+	ioctl(fd, UI_SET_ABSBIT, ABS_Y);
+	ioctl(fd, UI_SET_ABSBIT, ABS_Z);
 	ioctl(fd, UI_SET_ABSBIT, ABS_RX);
 	ioctl(fd, UI_SET_ABSBIT, ABS_RY);
 	ioctl(fd, UI_SET_ABSBIT, ABS_RZ);
 
 	//ioctl(fd, UI_SET_KEYBIT, BTN_TRIGGER);
 	//ioctl(fd, UI_SET_KEYBIT, BTN_THUMB);
-	/*
+	
 	struct uinput_abs_setup devAbsX = {0};
 	devAbsX.code = ABS_X;
 	devAbsX.absinfo.minimum = -512;
@@ -65,7 +65,7 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	devAbsZ.absinfo.flat = 5;
 	devAbsZ.absinfo.fuzz = 0;
 	if(ioctl(fd, UI_ABS_SETUP, &devAbsZ) < 0) return false;
-	*/
+	
 	struct uinput_abs_setup devAbsRX = {0};
 	devAbsRX.code = ABS_RX;
 	devAbsRX.absinfo.minimum = -GYRO_RANGE;
@@ -105,7 +105,7 @@ bool UinputDevice::sendAbs(int x, int y, int z, int rx, int ry, int rz)
 	if(fd < 0) return false;
 	
 	struct input_event ev = {0};
-	/*
+	
 	ev.type = EV_ABS;
 	ev.code = ABS_X;
 	ev.value = x;
@@ -121,8 +121,7 @@ bool UinputDevice::sendAbs(int x, int y, int z, int rx, int ry, int rz)
 	ev.value = z;
 	if(write(fd, &ev, sizeof(ev)) != sizeof(ev)) 
 		return false;
-	*/
-	ev.type = EV_ABS;
+	
 	ev.code = ABS_RX;
 	ev.value = rx;
 	if(write(fd, &ev, sizeof(ev)) != sizeof(ev)) 
