@@ -63,23 +63,37 @@ int main(int argc, char** argv)
 		return -1;
 	}
 	int startingGyroRate = gyro.getRate();
+	int updateRate = std::max(startingGyroRate, startingAccelRate);
+	if (updateRate <= 0)
+	{
+		std::cerr<<"failed to determine sensor update frequency"<<std::endl;
+		return -1;
+	}
 	
 	signal(SIGINT, sigTerm);
 	signal(SIGTERM, sigTerm);
 	signal(SIGHUP, sigTerm);
 	
 	int sleep_ms = 0;
-	if(config.rate > 0)
+	if(updateRate < 1000)
 	{
+		/*
 		accel.setRate(config.rate);
 		gyro.setRate(config.rate);
-		sleep_ms = 1000/config.rate;
-		std::cout<<"Setting sleep between frames at "<<sleep_ms<<"ms"<<std::endl;
+		*/
+		sleep_ms = 1000/updateRate;
 	}
+	else
+	{
+		sleep_ms = 1000/updateRate;
+	}
+	std::cout<<"Setting sleep between frames at "<<sleep_ms<<"ms"<<std::endl;
+	/*
 	if(!gyro.setScale(0.00106))
 	{
 		std::cerr<<"Failed to change gyro scale!"<<std::endl;
 	}
+	*/
 	
 	std::cout<<"Accel X | Accel Y | Accel Z | Gyro X | Gyro Y | Gyro Z"<<std::endl;
 
@@ -106,9 +120,11 @@ int main(int argc, char** argv)
 		}
 	}
 
+	/*
 	std::cout<<std::endl<<"Restoring original rate..."<<std::endl;
 	accel.setRate(startingAccelRate);
 	gyro.setRate(startingGyroRate);
-	
+	*/
+
 	return 0;
 }
