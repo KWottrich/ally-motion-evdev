@@ -1,6 +1,6 @@
 /**
- * Sigstoped
- * Copyright (C) 2020 Carl Klemm
+ * ally-motion-evdev
+ * Copyright (C) 2023 Kenny Wottrich
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,14 +28,14 @@ struct Config
 };
 
 const char *argp_program_version = "1.0";
-const char *argp_program_bug_address = "<carl@uvos.xyz>";
-static char doc[] = "Tool to allow the use of iio acclerometers as evdev input devices";
+const char *argp_program_bug_address = "<kenny.wottrich@gmail.com>";
+static char doc[] = "Tool to redirect ROG Ally accelerometer and gyro data from iio to evdev ";
 static char args_doc[] = "";
 
 static struct argp_option options[] = 
 {
-  {"rate",  'r', "rate",      0,  "Rate in Hz to run the acclerometer at" },
-  {"device", 'd', "iio device",      0,  "Set the iio device you want to use here" },
+  {"rate",  'r', "rate",      0,  "Rate in Hz at which to run the acclerometer and gyroscope" },
+  {"device", 'd', "iio device",      0,  "The name of the iio device corresponding to the Bosch BMI323" },
   { 0 }
 };
 
