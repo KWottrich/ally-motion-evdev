@@ -23,7 +23,7 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	struct uinput_setup dev = {0};
 	if (name.length() <= UINPUT_MAX_NAME_SIZE) strcpy(dev.name, name.c_str());
 	else strcpy(dev.name, name.substr(0, UINPUT_MAX_NAME_SIZE).c_str());
-	dev.id.bustype = BUS_USB;
+	dev.id.bustype = BUS_VIRTUAL;
 	dev.id.vendor = vendor;
 	dev.id.product = product;
 	
