@@ -3,5 +3,5 @@ CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
 .vscode/
-iio-uinput
+ally-motion-evdev
 build/

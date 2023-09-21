@@ -6,9 +6,9 @@ Requires NeroReflex's kernel driver for the bmi323 sensor (see https://github.co
 ## Build Instructions
 1. `cmake .`
 2. `make`
-3. `chmod +x iio-uinput`
+3. `chmod +x ally-motion-evdev`
 
 ## Running
-`./iio-uinput`
+`./ally-motion-evdev`
 
 To get the names of available iio devices, run `ls /sys/bus/iio/devices/`

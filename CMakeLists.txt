@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(iio-uinput)
+project(ally-motion-evdev)
 
 set(SRC_FILES main.cpp uinputdev.cpp iioaccell.cpp iiogyro.cpp)
 set(LIBS )
