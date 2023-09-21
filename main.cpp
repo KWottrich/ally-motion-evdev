@@ -39,7 +39,7 @@ int main(int argc, char** argv)
 	
 	if(config.device.empty())
 	{
-		config.device = Accelerometer::findAccelerometer();
+		config.device = Gyro::findGyro();
 		if(config.device.empty())
 		{
 			std::cout<<"No accelerometer specified and none found\n";
