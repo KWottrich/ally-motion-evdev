@@ -12,7 +12,7 @@
 
 #define ACCEL_SCALE 255/9.81 // scale m/s^2 to g's, and scale x255 to increase precision when passed as an int
 #define GYRO_SCALE 180/M_PI // Conversion factor for radians -> degrees
-#define DEVNAME "VirtMotionController"
+#define DEVNAME "Bosch BMI323 6DoF Sensor"
 
 bool stop = false;
 
