@@ -1,11 +1,14 @@
-# iio-uinput
-Small tool to redirect iio accelerometers to evdev to allow using a iio acclereometer as a joystick
+# ally-motion-evdev
+Tool to redirect ROG Ally accelerometer and gyro data from iio to evdev for use in games and applications.
 
-compile:
-cmake .
-make
+Requires NeroReflex's kernel driver for the bmi323 sensor (see https://github.com/NeroReflex/linux-chimeraos/tree/bmi323)
 
-run:
-run iio-uinput as root with the iio device name you want to use, must be a acclereometer.
+## Build Instructions
+1. `cmake .`
+2. `make`
+3. `chmod +x iio-uinput`
 
-to get the names of avaibale iio devices list the /sys/bus/iio/devices/ directory
+## Running
+`./iio-uinput`
+
+To get the names of available iio devices, run `ls /sys/bus/iio/devices/`
