@@ -10,13 +10,15 @@
 #include "iiogyro.h"
 #include "argpopt.h"
 
-#define ACCEL_SCALE 255/9.81 // scale m/s^2 to g's, and scale x255 to increase precision when passed as an int
-#define GYRO_SCALE 180/M_PI // Conversion factor for radians -> degrees
 #define DEVNAME "Bosch BMI323 6DoF Sensor"
+#define VENDOR 0x108c // Robert Bosch GmbH
+#define PRODUCT 0x323
+#define ACCEL_SCALE 255/9.81 // convert m/s^2 to g's, and scale x255 to increase precision when passed to evdev as an int
+#define GYRO_SCALE 180/M_PI  // convert radians/s to degrees/s
 
 bool stop = false;
 
-void sigTerm(int dummy) 
+void sigTerm(int _)
 {
     stop = true;
 }
@@ -24,7 +26,7 @@ void sigTerm(int dummy)
 int main(int argc, char** argv)
 {
 	UinputDevice dev;
-	if(!dev.openDev("/dev/uinput", DEVNAME, 0x46d, 0xc214))
+	if(!dev.openDev("/dev/uinput", DEVNAME, VENDOR, PRODUCT))
 	{
 		std::cerr<<"Failed to open /dev/uinput: ";
 		perror(NULL);
