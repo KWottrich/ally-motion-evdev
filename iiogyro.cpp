@@ -108,13 +108,18 @@ bool Gyro::setScale(double scale)
 {
 	std::fstream availableScalesFile;
 	availableScalesFile.open(deviceDir + "/in_anglvel_scale_available", std::ios_base::in);
-	if(!availableScalesFile.is_open()) return false;
+	if(!availableScalesFile.is_open())
+	{
+		std::cerr<<"Failed to open "<<deviceDir<<"/in_anglvel_scale_available"<<std::endl;
+		return false;
+	}
 	
 	std::fstream scaleFile;
 	scaleFile.open(deviceDir + "/in_anglvel_scale", std::ios_base::out);
 	if(!scaleFile.is_open())
 	{
 		availableScalesFile.close();
+		std::cerr<<"Failed to open "<<deviceDir<<"/in_anglvel_scale for writing"<<std::endl;
 		return false;
 	}
 	
