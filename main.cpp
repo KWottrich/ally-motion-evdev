@@ -87,7 +87,7 @@ int main(int argc, char** argv)
 	{
 		sleep_ms = 1000/updateRate;
 	}
-	std::cout<<"Setting sleep between frames at "<<sleep_ms<<"ms"<<std::endl;
+	std::cout<<"Update frequency from sensors: "<<updateRate<<"Hz"<<std::endl;
 	/*
 	if(!gyro.setScale(0.00106))
 	{
