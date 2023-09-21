@@ -105,6 +105,10 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	gettimeofday(&now, NULL);
 	secAtInit = now.tv_sec;
 	usecAtInit = now.tv_usec;
+
+	char sysfs_device_name[16];
+	ioctl(fd, UI_GET_SYSNAME(sizeof(sysfs_device_name)), sysfs_device_name);
+	printf("/sys/devices/virtual/input/%s\n", sysfs_device_name);
 	
 	return true;
 }
