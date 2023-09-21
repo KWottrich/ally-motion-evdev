@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 			return 0;
 		}
 	}
-	std::cout<<"Found device "<<config.device<<std::endl;
+	std::cout<<"Linking iio device at "<<config.device<<std::endl;
 	
 	Accelerometer accel;
 	if(!accel.openDevice(config.device))
