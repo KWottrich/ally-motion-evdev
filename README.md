@@ -8,6 +8,13 @@ Requires NeroReflex's kernel driver for the bmi323 sensor (see https://github.co
 2. `make`
 3. `chmod +x ally-motion-evdev`
 
+## udev Rule
+By default, the virtual device will be created at `/dev/input/eventXX` with read permissions restricted to root. Access to this device can be granted to logged-in users by adding the following `udev` rule:
+
+`ACTION=="add|change", KERNELS=="input[0-9]*", SUBSYSTEM=="input", ATTRS{idVendor}=="108c", ATTRS{idProduct}=="323", MODE="0660", TAG+="uaccess"`
+
+Adding a `udev` rule can be done by creating a new file in `/usr/lib/udev/rules.d/` (filename doesn't matter) and pasting in the above rule. Then you can either reboot your system or run `sudo udevadm control -R`.
+
 ## Running
 `./ally-motion-evdev`
 
