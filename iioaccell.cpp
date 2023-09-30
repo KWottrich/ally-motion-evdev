@@ -102,7 +102,7 @@ bool Accelerometer::setRate(unsigned int rate)
 		//std::cout<<"available accel sampling rate "<<curRate<<'\n';
 		if(curRate >= static_cast<int>(rate))
 		{
-			std::cout<<"setting accel rate: "<<curRate<<'\n';
+			//std::cout<<"setting accel rate: "<<curRate<<'\n';
 			rateFile<<curRate;
 			break;
 		}

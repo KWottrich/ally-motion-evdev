@@ -94,7 +94,7 @@ bool Gyro::setRate(unsigned int rate)
 		//std::cout<<"available gyro sampling rate "<<curRate<<'\n';
 		if(curRate >= static_cast<int>(rate))
 		{
-			std::cout<<"setting gyro rate: "<<curRate<<'\n';
+			//std::cout<<"setting gyro rate: "<<curRate<<'\n';
 			rateFile<<curRate;
 			break;
 		}
@@ -129,7 +129,7 @@ bool Gyro::setScale(double scale)
 		//std::cout<<"available gyro sampling rate "<<curRate<<'\n';
 		if(curScale >= static_cast<double>(scale))
 		{
-			std::cout<<"setting gyro scale: "<<curScale<<'\n';
+			//std::cout<<"setting gyro scale: "<<curScale<<'\n';
 			scaleFile<<curScale;
 			break;
 		}

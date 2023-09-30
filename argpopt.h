@@ -25,6 +25,7 @@ struct Config
 {
     int rate = -1;
 	std::string device;
+    bool verbose = true;
 };
 
 const char *argp_program_version = "1.0";
@@ -36,6 +37,7 @@ static struct argp_option options[] =
 {
   {"rate",  'r', "rate",      0,  "Rate in Hz at which to run the acclerometer and gyroscope" },
   {"device", 'd', "iio device",      0,  "The name of the iio device corresponding to the Bosch BMI323" },
+  {"silent",  's', "silent",      0,  "Suppress all non-error output" },
   { 0 }
 };
 
@@ -46,13 +48,15 @@ error_t parse_opt (int key, char *arg, struct argp_state *state)
     switch (key)
     {
         case 'r':
-        config->rate = atol(arg);
-        break;
+            config->rate = atol(arg);
+            break;
         case 'd':
-        config->device.assign(arg);
-        break;
+            config->device.assign(arg);
+            break;
+        case 's':
+            config->verbose = false;
         default:
-        return ARGP_ERR_UNKNOWN;
+            return ARGP_ERR_UNKNOWN;
     }
     return 0;
 }

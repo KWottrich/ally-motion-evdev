@@ -25,6 +25,9 @@ void sigTerm(int _)
 
 int main(int argc, char** argv)
 {
+	Config config;
+	argp_parse(&argp, argc, argv, 0, 0, &config);
+
 	UinputDevice dev;
 	if(!dev.openDev("/dev/uinput", DEVNAME, VENDOR, PRODUCT))
 	{
@@ -32,21 +35,20 @@ int main(int argc, char** argv)
 		perror(NULL);
 		return -1;
 	}
-	std::cout<<"Registered virtual device "<<DEVNAME<<std::endl;
-	
-	Config config;
-	argp_parse(&argp, argc, argv, 0, 0, &config);
+	if (config.verbose)
+		std::cout<<"Registered virtual device "<<DEVNAME<<std::endl;
 	
 	if(config.device.empty())
 	{
 		config.device = Gyro::findGyro();
 		if(config.device.empty())
 		{
-			std::cout<<"No accelerometer specified and none found\n";
+			std::cerr<<"No accelerometer specified and none found\n";
 			return 0;
 		}
 	}
-	std::cout<<"Linking iio device at "<<config.device<<std::endl;
+	if (config.verbose)
+		std::cout<<"Linking iio device at "<<config.device<<std::endl;
 	
 	Accelerometer accel;
 	if(!accel.openDevice(config.device))
@@ -54,7 +56,7 @@ int main(int argc, char** argv)
 		std::cerr<<"failed to open iio device "<<config.device<<" as an accelerometer"<<std::endl;
 		return -1;
 	}
-	int startingAccelRate = accel.getRate();
+	int accelRate = accel.getRate();
 
 	Gyro gyro;
 	if(!gyro.openDevice(config.device))
@@ -62,8 +64,8 @@ int main(int argc, char** argv)
 		std::cerr<<"failed to open iio device "<<config.device<<" as a gyroscope"<<std::endl;
 		return -1;
 	}
-	int startingGyroRate = gyro.getRate();
-	int updateRate = std::max(startingGyroRate, startingAccelRate);
+	int gyroRate = gyro.getRate();
+	int updateRate = std::max(gyroRate, accelRate);
 	if (updateRate <= 0)
 	{
 		std::cerr<<"failed to determine sensor update frequency"<<std::endl;
@@ -74,28 +76,12 @@ int main(int argc, char** argv)
 	signal(SIGTERM, sigTerm);
 	signal(SIGHUP, sigTerm);
 	
-	int sleep_ms = 0;
-	if(updateRate < 1000)
+	int sleep_ms = std::max(1000/updateRate, 1);
+	if (config.verbose)
 	{
-		/*
-		accel.setRate(config.rate);
-		gyro.setRate(config.rate);
-		*/
-		sleep_ms = 1000/updateRate;
+		std::cout<<"Update frequency from sensors: "<<updateRate<<"Hz"<<std::endl;
+		std::cout<<"Accel X | Accel Y | Accel Z | Gyro X | Gyro Y | Gyro Z"<<std::endl;
 	}
-	else
-	{
-		sleep_ms = 1000/updateRate;
-	}
-	std::cout<<"Update frequency from sensors: "<<updateRate<<"Hz"<<std::endl;
-	/*
-	if(!gyro.setScale(0.00106))
-	{
-		std::cerr<<"Failed to change gyro scale!"<<std::endl;
-	}
-	*/
-	
-	std::cout<<"Accel X | Accel Y | Accel Z | Gyro X | Gyro Y | Gyro Z"<<std::endl;
 
 	while(!stop)
 	{
@@ -110,9 +96,13 @@ int main(int argc, char** argv)
 		int gyroX = static_cast<int>(gyroFrame.x);
 		int gyroY = static_cast<int>(gyroFrame.y);
 		int gyroZ = static_cast<int>(gyroFrame.z);
-		std::cout<<"\33[2K\r";
-		printf("  %+4d  |   %+4d  |   %+4d  | %+5d  | %+5d  | %+5d", accelX, accelY, accelZ, gyroX, gyroY, gyroZ);
-		std::cout<<std::flush;
+		
+		if (config.verbose)
+		{
+			std::cout<<"\33[2K\r";
+			printf("  %+4d  |   %+4d  |   %+4d  | %+5d  | %+5d  | %+5d", accelX, accelY, accelZ, gyroX, gyroY, gyroZ);
+			std::cout<<std::flush;
+		}
 		
 		dev.sendAbs(accelX,accelY,accelZ,gyroFrame.x,gyroFrame.y,gyroFrame.z);
 		if (sleep_ms) {
@@ -120,12 +110,8 @@ int main(int argc, char** argv)
 		}
 	}
 
-	std::cout<<std::endl;
-	/*
-	std::cout<<std::endl<<"Restoring original rate..."<<std::endl;
-	accel.setRate(startingAccelRate);
-	gyro.setRate(startingGyroRate);
-	*/
+	if (config.verbose)
+		std::cout<<std::endl;
 
 	return 0;
 }
