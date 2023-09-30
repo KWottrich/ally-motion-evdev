@@ -11,6 +11,8 @@
 #define ACCEL_RANGE 512
 #define GYRO_RANGE  2000 // max range is +/- 35 radian/s
 
+#define GYRO_DEADZONE 1 // degrees/s to count as zero movement
+
 UinputDevice::UinputDevice()
 {
 }
@@ -76,7 +78,7 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	devAbsRX.absinfo.maximum = GYRO_RANGE;
 	devAbsRX.absinfo.resolution = 1; // 1 unit = 1 degree/s
 	devAbsRX.absinfo.fuzz = 16;
-	devAbsRX.absinfo.flat = 0;
+	devAbsRX.absinfo.flat = GYRO_DEADZONE;
 	if(ioctl(fd, UI_ABS_SETUP, &devAbsRX) < 0) return false;
 
 	struct uinput_abs_setup devAbsRY = {0};
@@ -85,7 +87,7 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	devAbsRY.absinfo.maximum = GYRO_RANGE;
 	devAbsRY.absinfo.resolution = 1; // 1 unit = 1 degree/s
 	devAbsRY.absinfo.fuzz = 16;
-	devAbsRY.absinfo.flat = 0;
+	devAbsRY.absinfo.flat = GYRO_DEADZONE;
 	if(ioctl(fd, UI_ABS_SETUP, &devAbsRY) < 0) return false;
 	
 	struct uinput_abs_setup devAbsRZ = {0};
@@ -94,7 +96,7 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	devAbsRZ.absinfo.maximum = GYRO_RANGE;
 	devAbsRZ.absinfo.resolution = 1; // 1 unit = 1 degree/s
 	devAbsRZ.absinfo.fuzz = 16;
-	devAbsRZ.absinfo.flat = 0;
+	devAbsRZ.absinfo.flat = GYRO_DEADZONE;
 	if(ioctl(fd, UI_ABS_SETUP, &devAbsRZ) < 0) return false;
 	
 		
