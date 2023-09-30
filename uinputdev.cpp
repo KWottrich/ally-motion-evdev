@@ -77,7 +77,7 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	devAbsRX.absinfo.minimum = -GYRO_RANGE;
 	devAbsRX.absinfo.maximum = GYRO_RANGE;
 	devAbsRX.absinfo.resolution = 1; // 1 unit = 1 degree/s
-	devAbsRX.absinfo.fuzz = 16;
+	devAbsRX.absinfo.fuzz = 0;
 	devAbsRX.absinfo.flat = GYRO_DEADZONE;
 	if(ioctl(fd, UI_ABS_SETUP, &devAbsRX) < 0) return false;
 
@@ -86,7 +86,7 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	devAbsRY.absinfo.minimum = -GYRO_RANGE;
 	devAbsRY.absinfo.maximum = GYRO_RANGE;
 	devAbsRY.absinfo.resolution = 1; // 1 unit = 1 degree/s
-	devAbsRY.absinfo.fuzz = 16;
+	devAbsRY.absinfo.fuzz = 0;
 	devAbsRY.absinfo.flat = GYRO_DEADZONE;
 	if(ioctl(fd, UI_ABS_SETUP, &devAbsRY) < 0) return false;
 	
@@ -95,7 +95,7 @@ bool UinputDevice::openDev(const std::string& uinputPath, const std::string& nam
 	devAbsRZ.absinfo.minimum = -GYRO_RANGE;
 	devAbsRZ.absinfo.maximum = GYRO_RANGE;
 	devAbsRZ.absinfo.resolution = 1; // 1 unit = 1 degree/s
-	devAbsRZ.absinfo.fuzz = 16;
+	devAbsRZ.absinfo.fuzz = 0;
 	devAbsRZ.absinfo.flat = GYRO_DEADZONE;
 	if(ioctl(fd, UI_ABS_SETUP, &devAbsRZ) < 0) return false;
 	
